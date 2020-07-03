@@ -21,7 +21,14 @@ Almost all existing apps have a forced taxonomy, placing arbitrary boundaries be
 ### Using Docker Compose (recommended)
 You will need Docker and Docker Compose installed.
 
-Setting up is as simple as copying the [`docker-compose.yml`](./docker-compose.yml) file and running `docker-compose up -d`.
+1. Copy the `docker-compose.yml` file
+2. Copy the `example.env` file and rename it to `.env`
+3. Create a random password to use for the PostgreSQL password and Secret Key.
+    Here's a simple way to generate these:
+    ```bash
+    openssl rand -hex 24
+   ```
+   and then replace them in the `.env` file
 
 ### Manually (not recommended)
 *TODO*
