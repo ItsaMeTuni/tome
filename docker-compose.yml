@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+
+  traefik:
+    image: traefik:v2
+    ports:
+      - "80:80"
+    command:
+      - "--providers.docker=true"
+      - "--entryPoints.web.address=:80"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  backend:
+    build:
+      context: backend
+    labels:
+      - "traefik.http.routers.backend.rule=PathPrefix(`/api/`)"
+    env_file: .env
