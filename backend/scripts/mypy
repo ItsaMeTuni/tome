@@ -1,0 +1,14 @@
+#!/bin/sh
+# this script ensures mypy is run with consistent options
+
+python -m mypy \
+  --disallow-untyped-defs \
+  --disallow-incomplete-defs \
+  --disallow-untyped-decorators \
+  --warn-unreachable \
+  --warn-return-any \
+  --show-column-numbers \
+  --show-error-codes \
+  --pretty \
+  --scripts-are-modules \
+  .

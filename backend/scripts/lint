@@ -1,0 +1,6 @@
+#!/bin/sh
+
+black --check .
+isort --check-only
+flakehell lint
+./scripts/mypy
