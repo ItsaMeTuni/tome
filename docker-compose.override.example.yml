@@ -35,3 +35,7 @@ services:
 #      - "--host"
 #      - "0.0.0.0"
 #      - "tome.app:app"
+
+  db:
+    ports:
+      - "5432:5432"

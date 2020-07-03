@@ -19,3 +19,15 @@ services:
     labels:
       - "traefik.http.routers.backend.rule=PathPrefix(`/api/`)"
     env_file: .env
+
+  db:
+    image: postgres:alpine
+    volumes:
+      - db:/data
+    environment:
+      - PGDATA=/data
+      - POSTGRES_USER=tome
+    env_file: .env
+
+volumes:
+  db:
