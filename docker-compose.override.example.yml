@@ -1,0 +1,37 @@
+# this is an example docker-compose.override.yml file that you can use for development
+
+version: "3.8"
+
+services:
+
+  traefik:
+    image: traefik:v2
+    ports:
+      - "80:80"
+      - "8080:8080"
+    command:
+      - "--providers.docker=true"
+      - "--entryPoints.web.address=:80"
+      - "--api.insecure=true"
+      - "--log.level=DEBUG"
+
+  backend:
+    build:
+      context: backend
+      dockerfile: dev.dockerfile
+    env:
+      TOME_DEBUG=true
+    volumes:
+      - "./backend:/home/user/app"
+    # you could use the command section to attach a debugger, for example
+#    command:
+#      - "pydevd"
+#      - "-m"
+#      - "uvicorn"
+#      - "--debug"
+#      - "--reload"
+#      - "--port"
+#      - "80"
+#      - "--host"
+#      - "0.0.0.0"
+#      - "tome.app:app"
