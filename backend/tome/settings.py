@@ -5,7 +5,7 @@ from typing import Any
 _PREFIX = "TOME_"
 
 
-def _get(name: str, default: Any = ...) -> Any:
+def _get(name: str, default: Any = ..., prefix: str = _PREFIX) -> Any:
     v = os.getenv(_PREFIX + name.upper())
     if not v and default is ...:
         raise Exception(
@@ -22,8 +22,11 @@ def _bool(string: str) -> bool:
     )
 
 
-# url to access postgresql, e.g. postgrsql://user:pass@host:port/database
-DSN = _get("DSN")
+POSTGRES_PASSWORD = _get("POSTGRESQL_PASSWORD", ..., "")
+POSTGRES_USER = _get("POSTGRESQL_USER", "tome", "")
+POSTGRES_DB = _get("POSTGRESQL_DATABASE", POSTGRES_USER, "")
+POSTGRES_PORT = int(_get("POSTGRESQL_PORT", "5432", ""))
+POSTGRES_HOST = int(_get("POSTGRESQL_HOST", "db", ""))
 
 # boolean, enable or disable sending emails
 SMTP_ENABLED = _bool(_get("SMTP_ENABLED", "")) and ...

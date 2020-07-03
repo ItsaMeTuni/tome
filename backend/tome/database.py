@@ -12,7 +12,13 @@ def connection() -> asyncpg.Connection:
 async def connect() -> None:
     global _connection
     if not _connection or not _connection.is_closed():
-        _connection = await asyncpg.connect(settings.DSN)
+        _connection = await asyncpg.connect(
+            host=settings.POSTGRES_HOST,
+            port=settings.POSTGRES_PORT,
+            user=settings.POSTGRES_USER,
+            password=settings.POSTGRES_PASSWORD,
+            database=settings.POSTGRES_DB,
+        )
 
 
 async def disconnect() -> None:
