@@ -27,8 +27,8 @@ You will need Docker and Docker Compose installed.
     Here's a simple way to generate these:
     ```bash
     openssl rand -hex 24
-   ```
-   and then replace them in the `.env` file
+    ```
+    and then replace them in the `.env` file
 
 ### Manually (not recommended)
 *TODO*
