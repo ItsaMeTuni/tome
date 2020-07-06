@@ -13,7 +13,7 @@ async def upgrade(conn: asyncpg.Connection) -> None:
         create table users (
             id uuid primary key default uuid_generate_v4(),
             email text unique not null,
-            name text not not null,
+            name text not null,
             password text not null
         );"""
     )
