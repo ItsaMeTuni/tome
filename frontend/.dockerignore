@@ -4,6 +4,8 @@
 
 !public/
 !src/
+!tests/
 !*.js
 !*.json
 !.editorconfig
+!.*rc
