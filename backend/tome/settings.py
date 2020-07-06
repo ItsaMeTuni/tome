@@ -6,10 +6,10 @@ _PREFIX = "TOME_"
 
 
 def _get(name: str, default: Any = ..., prefix: str = _PREFIX) -> Any:
-    v = os.getenv(_PREFIX + name.upper())
+    v = os.getenv(prefix + name.upper())
     if not v and default is ...:
         raise Exception(
-            f"missing required environment variable {_PREFIX + name.upper()}"
+            f"missing required environment variable {prefix + name.upper()}"
         )
     return v or default
 
@@ -22,11 +22,11 @@ def _bool(string: str) -> bool:
     )
 
 
-POSTGRES_PASSWORD = _get("POSTGRESQL_PASSWORD", ..., "")
-POSTGRES_USER = _get("POSTGRESQL_USER", "tome", "")
-POSTGRES_DB = _get("POSTGRESQL_DATABASE", POSTGRES_USER, "")
-POSTGRES_PORT = int(_get("POSTGRESQL_PORT", "5432", ""))
-POSTGRES_HOST = int(_get("POSTGRESQL_HOST", "db", ""))
+POSTGRES_PASSWORD = _get("POSTGRES_PASSWORD", ..., "")
+POSTGRES_USER = _get("POSTGRES_USER", "tome", "")
+POSTGRES_DB = _get("POSTGRES_DB", POSTGRES_USER, "")
+POSTGRES_PORT = int(_get("POSTGRES_PORT", "5432", ""))
+POSTGRES_HOST = _get("POSTGRES_HOST", "db", "")
 
 # boolean, enable or disable sending emails
 SMTP_ENABLED = _bool(_get("SMTP_ENABLED", "")) and ...

@@ -3,7 +3,7 @@ version: "3.8"
 services:
 
   traefik:
-    image: traefik:v2
+    image: traefik:v2.2
     ports:
       - "80:80"
     command:
@@ -19,6 +19,8 @@ services:
     labels:
       - "traefik.http.routers.backend.rule=PathPrefix(`/api/`)"
     env_file: .env
+    depends_on:
+      - db
 
   db:
     image: postgres:alpine

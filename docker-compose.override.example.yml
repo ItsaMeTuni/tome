@@ -5,7 +5,7 @@ version: "3.8"
 services:
 
   traefik:
-    image: traefik:v2
+    image: traefik:v2.2
     ports:
       - "80:80"
       - "8080:8080"
@@ -19,8 +19,10 @@ services:
     build:
       context: backend
       dockerfile: dev.dockerfile
-    env:
-      TOME_DEBUG=true
+      args:
+        USERID: ${USERID}
+    environment:
+      - "TOME_DEBUG=true"
     volumes:
       - "./backend:/home/user/app"
     # you could use the command section to attach a debugger, for example
