@@ -8,6 +8,8 @@ ARG USERID
 RUN useradd -mUu "${USERID:-1000}" -s /usr/bin/bash -d /home/user user
 USER ${USERID:-1000}
 
+ENV PATH="/home/user/.local/bin:${PATH}"
+
 # you probably want to mount /home/user/app as a volume to get live-reloading
 WORKDIR /home/user/app/
 COPY --chown=user:user . .
