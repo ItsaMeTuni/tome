@@ -41,9 +41,7 @@ async def test_api_key(db: asyncpg.Connection, monkeypatch):
     assert result == (user, ["foo", "bar"])
 
     with pytest.raises(HTTPException) as exc_info:
-        await tome.controllers.auth.create_api_key(
-            exp, user, ["foo", "not_allowed"]
-        )
+        await tome.controllers.auth.create_api_key(exp, user, ["foo", "not_allowed"])
     assert exc_info.value.status_code == 422
 
     with pytest.raises(HTTPException) as exc_info:

@@ -19,5 +19,5 @@ app = Starlette(
     ],
     on_startup=[database.connect, email.connect],
     on_shutdown=[database.disconnect, email.disconnect],
-    debug=DEBUG
+    debug=DEBUG,
 )

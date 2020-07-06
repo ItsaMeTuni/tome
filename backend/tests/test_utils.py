@@ -40,9 +40,7 @@ async def test_get_json() -> None:
             return self._body
 
     fake_data = {"some": "result", "unicode": "☭"}
-    assert fake_data == await tome.utils.get_json(
-        FakeRequest(orjson.dumps(fake_data))
-    )
+    assert fake_data == await tome.utils.get_json(FakeRequest(orjson.dumps(fake_data)))
 
     with pytest.raises(HTTPException) as exc_info:
         bad_json = orjson.dumps(fake_data)[:-2]

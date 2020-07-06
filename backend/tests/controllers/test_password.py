@@ -27,6 +27,4 @@ def test_rehash():
     assert tome.controllers.password.rehash("hunter2", hash_needs_rehash)
     hash_doesnt_need_rehash = tome.controllers.password.hash_password("hunter2")
 
-    assert (
-            tome.controllers.password.rehash("hunter2", hash_doesnt_need_rehash) is None
-    )
+    assert tome.controllers.password.rehash("hunter2", hash_doesnt_need_rehash) is None

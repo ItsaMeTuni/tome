@@ -33,9 +33,7 @@ async def test_email(monkeypatch):
     monkeypatch.setattr(tome.email.smtp, "send_message", async_(send_message))
     monkeypatch.setattr(tome.email, "MIMEMultipart", mime_multipart)
 
-    await tome.email.send_message(
-        "foo@example.com", "subject", "test", foo=2, bar=5
-    )
+    await tome.email.send_message("foo@example.com", "subject", "test", foo=2, bar=5)
     send_message.assert_called_with(mime_multipart)
 
     os.remove("templates/email/test.txt")
