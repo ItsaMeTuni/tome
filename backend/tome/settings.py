@@ -53,3 +53,5 @@ AUDIENCE = ISSUER = _get("JWT_NAME", "tome")
 ALGORITHM = _get("JWT_ALGORITHM", "HS256")
 # expiry time in seconds for auth tokens
 EXPIRY = int(_get("JWT_EXPIRY", 86400))
+
+DEBUG = _bool(_get("DEBUG", False))
