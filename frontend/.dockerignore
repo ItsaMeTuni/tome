@@ -1,0 +1,9 @@
+# inverted dockerignore format, useful for keeping out files unless actually necessary
+#  to reduce image size and keep out sensitive or user-specific files.
+*
+
+!public/
+!src/
+!*.js
+!*.json
+!.editorconfig
