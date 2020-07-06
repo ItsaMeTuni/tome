@@ -10,6 +10,8 @@ COPY --chown=${USERID:-1000} . /home/user/app
 
 WORKDIR /home/user/app/
 
+ENV NODE_ENV=development
+
 RUN npm install
 
 # use port > 1024 because we aren't running as root
