@@ -1,0 +1,13 @@
+# inverted dockerignore format, useful for keeping out files unless actually necessary
+#  to reduce image size and keep out sensitive or user-specific files.
+*
+
+!tome/**/*.py
+!migrations/*.py
+!templates/
+# TODO(pxeger) exclude tests and scripts from optimised images?
+!tests/**/*.py
+!scripts/*
+!pyproject.toml
+!poetry.lock
+!gunicorn_config.py
