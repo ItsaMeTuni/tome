@@ -45,6 +45,18 @@ export default {
     },
     doLogout ({ commit }) {
       commit('unsetLoginState')
+    },
+    async doRefresh ({ commit, dispatch }) {
+      const response = await dispatch('apiRequest', {
+        method: 'POST',
+        path: '/api/auth/refresh'
+      })
+      if (response.ok) {
+        commit('setLoginToken', await response.json())
+      } else {
+        const data = await response.json()
+        commit('setLoginState', data.error)
+      }
     }
   }
 }
