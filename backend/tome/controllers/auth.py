@@ -15,11 +15,11 @@ from tome.utils import ORJSONCodec
 ALLOWED_API_KEY_SCOPES: frozenset = frozenset(())
 
 
-async def get_auth_token(user: User, scope: List[str]) -> str:
+async def get_auth_token(user_id: UUID, scope: List[str]) -> str:
     now = time.time()
     return jwt.encode(
         {
-            "sub": user.id,
+            "sub": user_id,
             "iat": now,
             "nbf": now,
             "exp": now + EXPIRY,
@@ -71,14 +71,14 @@ async def validate_api_key(uuid: UUID) -> Tuple[User, List[str]]:
 
 
 async def create_api_key(
-    expiry: Optional[datetime], user: User, scope: Sequence[str]
+    expiry: Optional[datetime], user_id: UUID, scope: Sequence[str]
 ) -> UUID:
     if set(scope) - ALLOWED_API_KEY_SCOPES:
         raise HTTPException("cannot issue an API token with this scope", 422)
     key = await connection().fetchval(
         "insert into api_keys (scope, user_id, expiry) values ($1, $2, $3) returning id",
         orjson.dumps(scope).decode(),
-        user.id,
+        user_id,
         expiry,
     )
     return cast(UUID, key)

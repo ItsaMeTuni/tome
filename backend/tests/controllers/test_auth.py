@@ -36,12 +36,12 @@ async def test_api_key(db: asyncpg.Connection, monkeypatch):
         tome.controllers.auth, "ALLOWED_API_KEY_SCOPES", frozenset({"foo", "bar"})
     )
     exp = datetime.now() + timedelta(hours=1)
-    key = await tome.controllers.auth.create_api_key(exp, user, ["foo", "bar"])
+    key = await tome.controllers.auth.create_api_key(exp, user.id, ["foo", "bar"])
     result = await tome.controllers.auth.validate_api_key(key)
     assert result == (user, ["foo", "bar"])
 
     with pytest.raises(HTTPException) as exc_info:
-        await tome.controllers.auth.create_api_key(exp, user, ["foo", "not_allowed"])
+        await tome.controllers.auth.create_api_key(exp, user.id, ["foo", "not_allowed"])
     assert exc_info.value.status_code == 422
 
     with pytest.raises(HTTPException) as exc_info:
@@ -50,7 +50,7 @@ async def test_api_key(db: asyncpg.Connection, monkeypatch):
     assert exc_info.value.status_code == 401
 
     exp = datetime.now() - timedelta(hours=1)
-    key = await tome.controllers.auth.create_api_key(exp, user, ["foo", "bar"])
+    key = await tome.controllers.auth.create_api_key(exp, user.id, ["foo", "bar"])
 
     with pytest.raises(HTTPException) as exc_info:
         await tome.controllers.auth.validate_api_key(key)
@@ -63,7 +63,7 @@ async def test_auth_token(db: asyncpg.Connection):
 
     user = await _create_test_user(db)
 
-    auth_token = await tome.controllers.auth.get_auth_token(user, ["foo", "bar"])
+    auth_token = await tome.controllers.auth.get_auth_token(user.id, ["foo", "bar"])
 
     result = await tome.controllers.auth.validate_auth_token(auth_token.encode())
     assert result == (user, ["foo", "bar"])
