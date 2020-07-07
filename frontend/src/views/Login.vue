@@ -67,14 +67,13 @@
         </v-row>
       </v-container>
     </v-main>
-    <v-footer app>
-      Tome {{ version }}
-    </v-footer>
+    <Footer></Footer>
   </v-app>
 </template>
 
 <script>
 import { validate } from 'email-validator'
+import Footer from '@/components/Footer'
 
 export default {
   name: 'Login',
@@ -94,6 +93,9 @@ export default {
     showAlert: false,
     passwordVisible: false
   }),
+  components: {
+    Footer
+  },
   computed: {
     version () {
       return this.$store.state.version
