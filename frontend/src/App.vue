@@ -5,11 +5,10 @@
 <script>
 export default {
   name: 'App',
-
-  components: {},
-
-  data: () => ({
-    //
-  })
+  watch: {
+    '$vuetify.theme.dark' (value) {
+      localStorage.setItem('com.pxeger.tome.ui.dark', value.toString())
+    }
+  }
 }
 </script>

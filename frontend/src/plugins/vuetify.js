@@ -5,6 +5,6 @@ Vue.use(Vuetify)
 
 export default new Vuetify({
   theme: {
-    dark: true
+    dark: localStorage.getItem('com.pxeger.tome.ui.dark') !== 'false'
   }
 })
