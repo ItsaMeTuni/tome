@@ -1,7 +1,9 @@
+const loginToken = localStorage.getItem('com.pxeger.tome.auth_token')
+
 export default {
   state: {
-    loginToken: localStorage.getItem('com.pxeger.tome.auth_token'),
-    loginState: false
+    loginToken,
+    loginState: !!loginToken
   },
   mutations: {
     setLoginToken (state, token) {
