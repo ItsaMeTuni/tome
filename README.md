@@ -35,3 +35,8 @@ You will need Docker and Docker Compose installed.
 
 ## Development
 Tome's backend is written in Python, and the frontend is written in Vue.js. For more information, see the README files in the frontend and backend directories.
+
+### Version Bump
+List of places where the version needs to be updated:
+- [`backend/tome/__init__.py`](./backend/tome/__init__.py)
+- [`frontend/package.json`](./frontend/package.json)
