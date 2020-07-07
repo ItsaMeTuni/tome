@@ -1,6 +1,6 @@
 export default {
   state: {
-    loginToken: null,
+    loginToken: localStorage.getItem('com.pxeger.tome.auth_token'),
     loginState: false
   },
   mutations: {
