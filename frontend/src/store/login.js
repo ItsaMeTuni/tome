@@ -20,6 +20,7 @@ export default {
     unsetLoginState (state) {
       state.loginState = false
       state.loginToken = null
+      localStorage.removeItem('com.pxeger.tome.auth_token')
     }
   },
   actions: {
@@ -39,7 +40,6 @@ export default {
         commit('setLoginToken', await response.json())
       } else {
         const data = await response.json()
-        console.log(data)
         commit('setLoginState', data.error)
       }
     },
