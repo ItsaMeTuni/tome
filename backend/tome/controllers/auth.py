@@ -19,7 +19,7 @@ async def get_auth_token(user_id: UUID, scope: List[str]) -> str:
     now = time.time()
     return jwt.encode(
         {
-            "sub": user_id,
+            "sub": str(user_id),
             "iat": now,
             "nbf": now,
             "exp": now + EXPIRY,
