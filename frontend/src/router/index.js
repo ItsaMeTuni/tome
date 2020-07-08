@@ -20,6 +20,23 @@ const routes = [
       if (store.state.login.loginState === true) next(false)
       else next()
     }
+  },
+  {
+    path: '/settings',
+    name: 'Settings',
+    component: () => import(/* webpackChunkName: "account" */ '../views/Settings.vue'),
+    children: [
+      {
+        path: 'account',
+        name: 'Account',
+        component: () => import(/* webpackChunkName: "account" */ '../views/settings/Account.vue')
+      },
+      {
+        path: 'display',
+        name: 'Display',
+        component: () => import(/* webpackChunkName: "account" */ '../views/settings/Display.vue')
+      }
+    ]
   }
 ]
 
