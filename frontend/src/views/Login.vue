@@ -39,23 +39,7 @@
                     :rules="[v => validate(v) || 'Enter a valid email address']"
                     v-model="email"
                   ></v-text-field>
-                  <v-text-field
-                    label="Password"
-                    name="password"
-                    prepend-icon="mdi-asterisk"
-                    :type="passwordVisible ? 'text' : 'password'"
-                    required
-                    :rules="[v => !!v || 'This field is required']"
-                    v-model="password"
-                  >
-                    <template v-slot:append>
-                      <v-btn icon @click="passwordVisible = !passwordVisible">
-                        <v-icon>
-                          {{ passwordVisible ? 'mdi-eye-off' : 'mdi-eye' }}
-                        </v-icon>
-                      </v-btn>
-                    </template>
-                  </v-text-field>
+                  <Password v-model="password" prepend></Password>
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
@@ -74,6 +58,7 @@
 <script>
 import { validate } from 'email-validator'
 import Footer from '@/components/Footer'
+import Password from '@/components/Password'
 
 export default {
   name: 'Login',
@@ -94,7 +79,8 @@ export default {
     passwordVisible: false
   }),
   components: {
-    Footer
+    Footer,
+    Password
   },
   computed: {
     version () {
