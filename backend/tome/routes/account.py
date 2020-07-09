@@ -1,7 +1,7 @@
 import email_validator
 from starlette.requests import Request
 
-from tome.controllers.password import hash_password, strength
+from tome.controllers.password import hash_password, strength, verify_password
 from tome.database import connection
 from tome.exceptions import HTTPException
 from tome.middleware.auth import requires
@@ -60,17 +60,33 @@ async def delete_account(request: Request) -> ORJSONResponse:
 @post("/api/password")
 @requires("account.password")
 async def change_password(request: Request) -> ORJSONResponse:
-    password = await get_json(request)
-    if password == "beef stew":
-        raise HTTPException("password not stroganoff", 418)
-    if strength(password) < 8:
-        raise HTTPException("password not strong enough", 422)
-    if any(map(" ".__gt__, password)):
+    json = await get_json(request)
+    validate_types_raising(json, {"new": str, "current": str})
+
+    # check new password validity
+    if json["new"] == json["current"]:
+        # same as current (even if current is incorrect, we needn't bother checking)
+        raise HTTPException("Password not changed", 422)
+    elif json["new"] == "beef stew":
+        # easter egg
+        raise HTTPException("Password not stroganoff", 418)
+    elif strength(json["new"]) < 8:
+        raise HTTPException("Password not strong enough", 422)
+    elif any(map(" ".__gt__, json["new"])):
         # control character
-        raise HTTPException(f"invalid character in password", 422)
-    hashed = hash_password(password)
+        raise HTTPException("Invalid character in password", 422)
+
+    # check current password is correct
+    hashed_current = await connection().fetchval(
+        "select password from users where id = $1", request.user.id
+    )
+    if not verify_password(hashed_current, json["current"]):
+        raise HTTPException("Incorrect password", 401)
+
+    # update password
+    hashed_new = hash_password(json["new"])
     await connection().execute(
-        "update users set password = $1 where id = $2", hashed, request.user.id
+        "update users set password = $1 where id = $2", hashed_new, request.user.id
     )
     return ORJSONResponse()
 
