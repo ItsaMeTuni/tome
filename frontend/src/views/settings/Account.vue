@@ -53,12 +53,21 @@ export default {
   name: 'AccountSettings',
   data: () => ({
     name: 'Scott Morrison',
-    email: 'scott@gov.au'
+    email: 'scott@gov.au',
+    prevName: 'Scott Morrison',
+    prevEmail: 'scott@gov.au'
   }),
   methods: {
     validateEmail: validate,
     handleGeneralSubmit () {
-      alert(1)
+      if (this.name !== this.prevName) {
+        this.$store.dispatch('account/changeName', this.name)
+        this.prevName = this.name
+      }
+      if (this.email !== this.prevEmail) {
+        this.$store.dispatch('account/changeEmail', this.email)
+        this.prevEmail = this.email
+      }
     },
     handleDeleteAccount () {
       if (confirm('Are you completely sure you want to delete your account? This action' +
