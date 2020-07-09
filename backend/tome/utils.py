@@ -125,6 +125,8 @@ def validate_types(data: Any, type_: Any, /) -> bool:
             and type_.keys() == data.keys()
             and all(validate_types(v, type_[k]) for k, v in data.items())
         )
+    elif isinstance(type_, set):
+        return any(validate_types(data, t) for t in type_)
     else:
         if not isinstance(type_, type):
             raise TypeError(f"cannot type-check {type_}")
