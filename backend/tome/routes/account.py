@@ -1,11 +1,12 @@
 import email_validator
 from starlette.requests import Request
 
+from tome.controllers.password import hash_password, strength
 from tome.database import connection
 from tome.exceptions import HTTPException
 from tome.middleware.auth import requires
 from tome.responses import ORJSONResponse
-from tome.routing import delete, get, patch
+from tome.routing import delete, get, patch, post
 from tome.utils import get_json, validate_types_raising
 
 
@@ -54,3 +55,21 @@ async def patch_account_email(request: Request) -> ORJSONResponse:
             request.user.id,
         )
     return ORJSONResponse(None, 205)
+
+
+@post("/api/password")
+@requires("account.password")
+async def change_password(request: Request) -> ORJSONResponse:
+    password = await get_json(request)
+    if password == "beef stew":
+        raise HTTPException("password not stroganoff", 418)
+    if strength(password) < 8:
+        raise HTTPException("password not strong enough", 422)
+    if any(map(" ".__gt__, password)):
+        # control character
+        raise HTTPException(f"invalid character in password", 422)
+    hashed = hash_password(password)
+    await connection().execute(
+        "update users set password = $1 where id = $2", hashed, request.user.id
+    )
+    return ORJSONResponse()
