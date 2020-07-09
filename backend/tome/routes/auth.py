@@ -9,6 +9,15 @@ from tome.responses import ORJSONResponse
 from tome.routing import post
 from tome.utils import get_json, validate_types_raising
 
+LOGIN_SCOPES = [
+    "account.read",
+    "account.email.write",
+    "account.name.write",
+    "account.delete",
+    "account.password",
+    "refresh",
+]
+
 
 @post("/api/auth/login")
 async def login(request: starlette.requests.Request) -> ORJSONResponse:
@@ -20,9 +29,7 @@ async def login(request: starlette.requests.Request) -> ORJSONResponse:
     )
     if not (row and verify_password(row["password"], json["password"])):
         raise HTTPException("Incorrect username or password", 401)
-    return ORJSONResponse(
-        await get_auth_token(row["id"], ["user/read", "user/write", "refresh"])
-    )
+    return ORJSONResponse(await get_auth_token(row["id"], LOGIN_SCOPES))
 
 
 @post("/api/auth/refresh")
