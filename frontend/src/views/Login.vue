@@ -66,7 +66,7 @@ export default {
     handleSubmit () {
       this.hasSubmitted = true
       const { email, password } = this
-      this.$store.dispatch('doLogin', { email, password })
+      this.$store.dispatch('login/doLogin', { email, password })
     },
     validate
   },
@@ -104,7 +104,7 @@ export default {
     },
     showAlert (value) {
       if (!value) {
-        this.$store.commit('login.setLoginState', false)
+        this.$store.commit('login/setLoginState', false)
       }
     }
   }

@@ -1,6 +1,7 @@
 const loginToken = localStorage.getItem('com.pxeger.tome.auth_token')
 
 export default {
+  namespaced: true,
   state: {
     loginToken,
     loginState: !!loginToken
