@@ -1,3 +1,3 @@
-from tome.routes import api_key, auth
+from tome.routes import account, api_key, auth
 
-routes = [*auth.routes, *api_key.routes]
+routes = [*auth.routes, *api_key.routes, *account.routes]

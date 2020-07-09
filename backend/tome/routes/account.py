@@ -18,7 +18,7 @@ async def get_account(request: Request) -> ORJSONResponse:
 
 @patch("/api/me/name")
 @requires("account.write.name")
-async def patch_account(request: Request) -> ORJSONResponse:
+async def patch_account_name(request: Request) -> ORJSONResponse:
     name = await get_json(request)
     validate_types_raising(name, str)
     if not name:
@@ -46,7 +46,7 @@ async def patch_account_email(request: Request) -> ORJSONResponse:
 
 @delete("/api/me")
 @requires("account.delete")
-async def patch_account_email(request: Request) -> ORJSONResponse:
+async def delete_account(request: Request) -> ORJSONResponse:
     conn = connection()
     async with conn.transaction():
         await conn.execute(
@@ -73,3 +73,12 @@ async def change_password(request: Request) -> ORJSONResponse:
         "update users set password = $1 where id = $2", hashed, request.user.id
     )
     return ORJSONResponse()
+
+
+routes = [
+    change_password,
+    patch_account_email,
+    patch_account_name,
+    delete_account,
+    get_account,
+]
