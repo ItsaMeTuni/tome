@@ -11,8 +11,8 @@ from tome.utils import get_json, validate_types_raising
 
 LOGIN_SCOPES = [
     "account.read",
-    "account.email.write",
-    "account.name.write",
+    "account.write.email",
+    "account.write.name",
     "account.delete",
     "account.password",
     "refresh",
