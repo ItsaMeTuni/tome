@@ -4,6 +4,8 @@ import Vuex from 'vuex'
 import login from './login'
 import account from './account'
 
+import router from '@/router'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -13,8 +15,8 @@ export default new Vuex.Store({
   mutations: {
   },
   actions: {
-    async apiRequest ({ state }, { method, path, data }) {
-      return await fetch(path, {
+    async apiRequest ({ state, commit }, { method, path, data }) {
+      const response = await fetch(path, {
         method,
         body: data === undefined ? data : JSON.stringify(data),
         headers: {
@@ -22,6 +24,11 @@ export default new Vuex.Store({
           Authorization: 'Bearer ' + state.login.loginToken
         }
       })
+      if (response.status === 401 && (await response.json()).error === 'invalid token') {
+        commit('login/unsetLoginState')
+        router.push('/login')
+      }
+      return response
     }
   },
   modules: {
