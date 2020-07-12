@@ -24,24 +24,24 @@ const routes = [
   {
     path: '/settings',
     name: 'Settings',
-    component: () => import(/* webpackChunkName: "account" */ '../views/Settings.vue'),
+    component: () => import(/* webpackChunkName: "settings" */ '../views/Settings.vue'),
     children: [
       {
         path: 'account',
         name: 'Account',
-        component: () => import(/* webpackChunkName: "account" */ '../views/settings/Account.vue')
+        component: () => import(/* webpackChunkName: "settings-account" */ '../views/settings/Account.vue')
       },
       {
         path: 'display',
         name: 'Display',
-        component: () => import(/* webpackChunkName: "account" */ '../views/settings/Display.vue')
+        component: () => import(/* webpackChunkName: "settings-display" */ '../views/settings/Display.vue')
       }
     ]
   },
   {
     path: '/logout',
     name: 'Logout',
-    component: () => import(/* webpackChunkName: "login" */ '../views/Logout.vue')
+    component: () => import(/* webpackChunkName: "logout" */ '../views/Logout.vue')
   }
 ]
 
