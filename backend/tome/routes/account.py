@@ -57,7 +57,7 @@ async def delete_account(request: Request) -> ORJSONResponse:
     return ORJSONResponse(None, 205)
 
 
-@post("/api/password")
+@post("/api/me/password")
 @requires("account.password")
 async def change_password(request: Request) -> ORJSONResponse:
     json = await get_json(request)
