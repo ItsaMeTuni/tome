@@ -5,7 +5,8 @@ export default {
     email: null,
     errors: [],
     currentPassword: '',
-    newPassword: ''
+    newPassword: '',
+    userId: null
   },
   mutations: {
     setName (state, value) {
@@ -25,6 +26,9 @@ export default {
     },
     delError (state, idx) {
       state.errors.splice(idx, 1)
+    },
+    setUserId (state, value) {
+      state.userId = value
     }
   },
   actions: {
@@ -94,6 +98,7 @@ export default {
           else {
             commit('setEmail', d.email)
             commit('setName', d.name)
+            commit('setUserId', d.id)
           }
         })
       }).catch(e => {

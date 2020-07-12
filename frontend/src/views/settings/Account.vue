@@ -88,6 +88,7 @@
       <p>If you wish to delete your account and all associated content, you can do so here.
         Please note that this action is <strong>completely irreversible!</strong></p>
       <v-btn color="error" outlined @click="handleDeleteAccount">Delete Account</v-btn>
+      <p class="mt-4"><i class="pe-1">User ID: </i><code>{{ userId }}</code></p>
     </section>
   </div>
 </template>
@@ -148,6 +149,9 @@ export default {
       set (val) {
         this.$store.commit('account/setNewPassword', val)
       }
+    },
+    userId () {
+      return this.$store.state.account.userId
     }
   },
   beforeRouteEnter (whither, whence, next) {
