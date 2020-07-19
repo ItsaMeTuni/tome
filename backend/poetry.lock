@@ -478,6 +478,14 @@ flake8 = ["flake8", "flake8-import-order", "pep8-naming"]
 test = ["pytest (>=4.0.1,<5.0.0)", "pytest-cov (>=2.6.0,<3.0.0)", "pytest-runner (>=4.2,<5.0.0)"]
 
 [[package]]
+category = "main"
+description = "Python One Time Password Library"
+name = "pyotp"
+optional = false
+python-versions = "*"
+version = "2.3.0"
+
+[[package]]
 category = "dev"
 description = "Python parsing module"
 name = "pyparsing"
@@ -635,7 +643,7 @@ python-versions = ">=3.6.1"
 version = "8.1"
 
 [metadata]
-content-hash = "b238d3fe8659f5323a65c9ddb4f0735f867fcf03f2e2079bf70f9531be1a36e1"
+content-hash = "723839b1525a416ef5786a27f920e91a129cc976e1886ce1e6df10511c5fea09"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -939,6 +947,10 @@ pyflakes = [
 pyjwt = [
     {file = "PyJWT-1.7.1-py2.py3-none-any.whl", hash = "sha256:5c6eca3c2940464d106b99ba83b00c6add741c9becaec087fb7ccdefea71350e"},
     {file = "PyJWT-1.7.1.tar.gz", hash = "sha256:8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96"},
+]
+pyotp = [
+    {file = "pyotp-2.3.0-py2.py3-none-any.whl", hash = "sha256:c88f37fd47541a580b744b42136f387cdad481b560ef410c0d85c957eb2a2bc0"},
+    {file = "pyotp-2.3.0.tar.gz", hash = "sha256:fc537e8acd985c5cbf51e11b7d53c42276fee017a73aec7c07380695671ca1a1"},
 ]
 pyparsing = [
     {file = "pyparsing-2.4.7-py2.py3-none-any.whl", hash = "sha256:ef9d7589ef3c200abe66653d3f1ab1033c3c419ae9b9bdb1240a85b024efc88b"},
