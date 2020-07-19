@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import login from './login'
 import account from './account'
+import apikeys from './apikeys'
 
 import router from '@/router'
 
@@ -33,6 +34,7 @@ export default new Vuex.Store({
   },
   modules: {
     login,
-    account
+    account,
+    apikeys
   }
 })
