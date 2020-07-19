@@ -12,7 +12,11 @@ from tome.models.user import User
 from tome.settings import ALGORITHM, AUDIENCE, EXPIRY, ISSUER, SECRET_KEY
 from tome.utils import ORJSONCodec
 
-ALLOWED_API_KEY_SCOPES: frozenset = frozenset(())
+ALLOWED_API_KEY_SCOPES: frozenset = frozenset((
+    "account.read",
+    "account.write.email",
+    "account.write.name",
+))
 
 
 async def get_auth_token(user_id: UUID, scope: List[str]) -> str:
