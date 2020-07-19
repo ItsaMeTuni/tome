@@ -41,7 +41,7 @@ async def connect() -> None:
             encoder=_uuid_coerce,
             decoder=lambda u: uuid.UUID(bytes=u),
             schema="pg_catalog",
-            format="binary"
+            format="binary",
         )
 
 
