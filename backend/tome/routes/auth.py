@@ -15,6 +15,9 @@ LOGIN_SCOPES = [
     "account.write.name",
     "account.delete",
     "account.password",
+    "account.api_key.get",
+    "account.api_key.generate",
+    "account.api_key.delete",
     "refresh",
 ]
 

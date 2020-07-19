@@ -22,17 +22,18 @@ async def generate_api_key(request: Request) -> ORJSONResponse:
     else:
         expiry = None
     scope = json["scope"]
-    key = await create_api_key(expiry, request.user, scope)
+    key = await create_api_key(expiry, request.user.id, scope)
     return ORJSONResponse(key, 201)
 
 
 @delete("/api/account/api_key")
 @requires("account.api_key.delete")
 async def delete_api_key(request: Request) -> ORJSONResponse:
-    validate_types_raising(request.query_params, {"id": str})
+    query = dict(request.query_params)
+    validate_types_raising(query, {"id": str})
     result = await connection().execute(
         "delete from api_keys where id = $1 and user_id = $2",
-        request.query_params["id"],
+        query["id"],
         request.user.id,
     )
     if result.split(" ")[1] == "0":
@@ -44,18 +45,23 @@ async def delete_api_key(request: Request) -> ORJSONResponse:
 @requires("account.api_key.get")
 async def get_api_key(request: Request) -> ORJSONResponse:
     if "id" in request.query_params:
-        result = await connection().fetch(
+        result = await connection().fetchrow(
             "select id, scope, expiry from api_keys where id = $1 and user_id = $2",
             request.query_params["id"],
             request.user.id,
         )
         if not result:
             raise HTTPException("not found", 404)
+        else:
+            result = dict(result)
     else:
-        result = dict(
-            await connection().fetchrow(
-                "select id, scope, expiry from api_keys where user_id = $1",
-                request.user.id,
+        result = list(
+            map(
+                dict,
+                await connection().fetch(
+                    "select id, scope, expiry from api_keys where user_id = $1",
+                    request.user.id,
+                ),
             )
         )
     return ORJSONResponse(result)
