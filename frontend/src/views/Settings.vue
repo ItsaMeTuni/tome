@@ -56,6 +56,11 @@ export default {
         to: '/settings/display'
       },
       {
+        icon: 'key',
+        title: 'API keys',
+        to: '/settings/apikeys'
+      },
+      {
         icon: 'exit-to-app',
         title: 'Log Out',
         to: '/logout'

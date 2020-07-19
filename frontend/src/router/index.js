@@ -35,6 +35,11 @@ const routes = [
         path: 'display',
         name: 'Display',
         component: () => import(/* webpackChunkName: "settings-display" */ '../views/settings/Display.vue')
+      },
+      {
+        path: 'apikeys',
+        name: 'API keys',
+        component: () => import(/* webpackChunkName: "settings-apikeys" */ '../views/settings/APIKeys.vue')
       }
     ]
   },
