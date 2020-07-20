@@ -13,7 +13,12 @@ from tome.utils import get_json, validate_types_raising
 @get("/api/me")
 @requires("account.read")
 async def get_account(request: Request) -> ORJSONResponse:
-    return ORJSONResponse(request.user.__dict__)
+    return ORJSONResponse({
+        "id": request.user.id,
+        "email": request.user.email,
+        "name": request.user.name,
+        "two_factor_enabled": bool(request.user.two_factor_recovery)
+    })
 
 
 @patch("/api/me/name")
@@ -77,10 +82,7 @@ async def change_password(request: Request) -> ORJSONResponse:
         raise HTTPException("Invalid character in password", 422)
 
     # check current password is correct
-    hashed_current = await connection().fetchval(
-        "select password from users where id = $1", request.user.id
-    )
-    if not verify_password(hashed_current, json["current"]):
+    if not verify_password(request.user.password, json["current"]):
         raise HTTPException("Incorrect password", 401)
 
     # update password

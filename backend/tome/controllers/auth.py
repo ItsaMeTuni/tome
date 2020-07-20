@@ -49,7 +49,7 @@ async def validate_auth_token(token: bytes) -> Tuple[User, List[str]]:
     except jwt.InvalidTokenError as e:
         raise HTTPException("invalid token", 401) from e
     user = await connection().fetchrow(
-        "SELECT id, name, email FROM users WHERE id = $1", payload["sub"]
+        "SELECT * FROM users WHERE id = $1", payload["sub"]
     )
     if user is None:
         raise HTTPException("account not available", 409)
@@ -58,19 +58,32 @@ async def validate_auth_token(token: bytes) -> Tuple[User, List[str]]:
 
 async def validate_api_key(uuid: UUID) -> Tuple[User, List[str]]:
     result = await connection().fetchrow(
-        "select api_keys.scope, users.id, users.name, users.email, api_keys.expiry "
-        "from api_keys inner join users on api_keys.user_id = users.id "
-        "where api_keys.id = $1 limit 1",
+        """
+        select (
+            api_keys.expiry,
+            api_keys.scope,
+            users.id,
+            users.name,
+            users.email,
+            users.password,
+            users.two_factor_secret,
+            users.two_factor_recovery
+        )
+        from api_keys inner join users on api_keys.user_id = users.id 
+        where api_keys.id = $1 limit 1;
+        """,
         uuid,
     )
     if result is None:
         raise HTTPException("invalid API key", 401)
-    if result["expiry"] is not None and result["expiry"] <= datetime.now():
+    expiry = result.pop("expiry")
+    if expiry is not None and expiry <= datetime.now():
         # expired
         raise HTTPException("invalid API key", 401)
+    scope = result.pop("scope")
     return (
-        User(name=result["name"], email=result["email"], id=result["id"]),
-        orjson.loads(result["scope"]),
+        User(**result),
+        orjson.loads(scope),
     )
 
 
