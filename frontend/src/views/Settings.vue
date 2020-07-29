@@ -51,14 +51,19 @@ export default {
         to: '/settings/account'
       },
       {
-        icon: 'eye',
-        title: 'Display',
-        to: '/settings/display'
+        icon: 'lock',
+        title: '2FA',
+        to: '/settings/2fa'
       },
       {
         icon: 'key',
         title: 'API keys',
         to: '/settings/apikeys'
+      },
+      {
+        icon: 'eye',
+        title: 'Display',
+        to: '/settings/display'
       },
       {
         icon: 'exit-to-app',

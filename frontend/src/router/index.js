@@ -32,6 +32,11 @@ const routes = [
         component: () => import(/* webpackChunkName: "settings-account" */ '../views/settings/Account.vue')
       },
       {
+        path: '2fa',
+        name: 'Two-factor authentication',
+        component: () => import(/* webpackChunkName: "settings-two-factor" */ '../views/settings/TwoFactor.vue')
+      },
+      {
         path: 'display',
         name: 'Display',
         component: () => import(/* webpackChunkName: "settings-display" */ '../views/settings/Display.vue')

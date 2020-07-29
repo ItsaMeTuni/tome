@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import login from './login'
 import account from './account'
 import apikeys from './apikeys'
+import twoFactor from './twoFactor'
 
 import router from '@/router'
 
@@ -35,6 +36,7 @@ export default new Vuex.Store({
   modules: {
     login,
     account,
-    apikeys
+    apikeys,
+    twoFactor
   }
 })
