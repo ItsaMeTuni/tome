@@ -15,6 +15,7 @@ argon2-cffi = "^20.1.0"
 jinja2 = "^2.11.2"
 email-validator = "^1.1.1"
 pyotp = "^2.3.0"
+qrcode = {extras = ["pil"], version = "^6.1"}
 
 [tool.poetry.dev-dependencies]
 flake9 = "^3.8.3"
