@@ -122,8 +122,8 @@ def validate_types(data: Any, type_: Any, /) -> bool:
         # { name: type } dict
         return (
             isinstance(data, dict)
-            and type_.keys() == data.keys()
-            and all(validate_types(v, type_[k]) for k, v in data.items())
+            and not (type_.keys() - data.keys())
+            and all(validate_types(v, type_.get(k)) for k, v in data.items())
         )
     elif isinstance(type_, set):
         return any(validate_types(data, t) for t in type_)

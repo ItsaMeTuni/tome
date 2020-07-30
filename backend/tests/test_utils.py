@@ -69,6 +69,13 @@ def test_validate_types() -> None:
     assert not tome.utils.validate_types(43, {"foo": int})
     assert tome.utils.validate_types({"foo": 43}, {"foo": int})
     assert not tome.utils.validate_types({"foo": 43, "extra": False}, {"foo": int})
+    assert tome.utils.validate_types(
+        {"foo": 43, "bar": "bar"}, {"foo": int, "bar": Optional[str]}
+    )
+    assert tome.utils.validate_types(
+        {"foo": 43, "bar": None}, {"foo": int, "bar": Optional[str]}
+    )
+    assert tome.utils.validate_types({"foo": 43}, {"foo": int, "bar": Optional[str]})
     assert tome.utils.validate_types(43, Optional[int])
     assert tome.utils.validate_types(43, Final[int])
     assert tome.utils.validate_types(43, ClassVar[int])
