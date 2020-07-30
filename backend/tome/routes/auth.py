@@ -73,4 +73,4 @@ async def refresh(request: starlette.requests.Request) -> ORJSONResponse:
     return ORJSONResponse(await get_auth_token(request.user.id, request.auth))
 
 
-routes = [login, two_factor_upgrade]
+routes = [login, two_factor_upgrade, refresh]
