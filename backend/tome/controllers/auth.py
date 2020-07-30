@@ -12,11 +12,9 @@ from tome.models.user import User
 from tome.settings import ALGORITHM, AUDIENCE, EXPIRY, ISSUER, SECRET_KEY
 from tome.utils import ORJSONCodec
 
-ALLOWED_API_KEY_SCOPES: frozenset = frozenset((
-    "account.read",
-    "account.write.email",
-    "account.write.name",
-))
+ALLOWED_API_KEY_SCOPES: frozenset = frozenset(
+    ("account.read", "account.write.email", "account.write.name",)
+)
 
 
 async def get_auth_token(user_id: UUID, scope: List[str], expiry: int = EXPIRY) -> str:
@@ -69,7 +67,7 @@ async def validate_api_key(uuid: UUID) -> Tuple[User, List[str]]:
             users.two_factor_secret,
             users.two_factor_recovery
         )
-        from api_keys inner join users on api_keys.user_id = users.id 
+        from api_keys inner join users on api_keys.user_id = users.id
         where api_keys.id = $1 limit 1;
         """,
         uuid,

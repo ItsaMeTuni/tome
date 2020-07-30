@@ -32,7 +32,7 @@ pytest-asyncio = "^0.14.0"
 
 [tool.flake8]
 max_line_length = 88
-ignore = "E501,W503,H301,H306"
+ignore = "E501,W503,H301,H306,E231,W293"
 enable_extensions = "H106"
 
 [tool.isort]

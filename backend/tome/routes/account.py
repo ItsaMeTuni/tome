@@ -2,10 +2,10 @@ import base64
 import io
 import urllib.parse
 
-import email_validator
-import pyotp
-from qrcode.image.svg import SvgPathFillImage
-from qrcode import make as make_qr_code
+import email_validator  # type: ignore
+import pyotp  # type: ignore
+from qrcode import make as make_qr_code  # type: ignore
+from qrcode.image.svg import SvgPathFillImage  # type: ignore
 from starlette.requests import Request
 
 from tome.controllers.password import hash_password, strength, verify_password
@@ -22,11 +22,9 @@ TOTP_ISSUER = "Tome"
 @get("/api/me")
 @requires("account.read")
 async def get_account(request: Request) -> ORJSONResponse:
-    return ORJSONResponse({
-        "id": request.user.id,
-        "email": request.user.email,
-        "name": request.user.name,
-    })
+    return ORJSONResponse(
+        {"id": request.user.id, "email": request.user.email, "name": request.user.name,}
+    )
 
 
 @patch("/api/me/name")
@@ -126,10 +124,9 @@ async def get_two_factor_status(request: Request) -> ORJSONResponse:
         two_factor_status = "setup_in_progress"
     else:
         two_factor_status = "disabled"
-    return ORJSONResponse({
-        "status": two_factor_status,
-        "recovery": request.user.two_factor_recovery
-    })
+    return ORJSONResponse(
+        {"status": two_factor_status, "recovery": request.user.two_factor_recovery}
+    )
 
 
 @post("/api/me/two_factor/begin_setup")
@@ -143,15 +140,12 @@ async def begin_two_factor_setup(request: Request) -> ORJSONResponse:
     secret = pyotp.random_base32(32)
 
     await connection().execute(
-        "update users set two_factor_secret = $1 where id = $2",
-        secret,
-        request.user.id
+        "update users set two_factor_secret = $1 where id = $2", secret, request.user.id
     )
 
-    return ORJSONResponse({
-        "secret": secret,
-        "qr_code_url": make_totp_qr_code(secret, request.user.email)
-    })
+    return ORJSONResponse(
+        {"secret": secret, "qr_code_url": make_totp_qr_code(secret, request.user.email)}
+    )
 
 
 @post("/api/me/two_factor/confirm_setup")
@@ -171,7 +165,7 @@ async def confirm_two_factor_setup(request: Request) -> ORJSONResponse:
     await connection().execute(
         "update users set two_factor_recovery = $1 where id = $2",
         recovery,
-        request.user.id
+        request.user.id,
     )
     return ORJSONResponse(recovery)
 
@@ -194,12 +188,12 @@ async def cancel_two_factor_setup(request: Request) -> ORJSONResponse:
 async def disable_two_factor(request: Request) -> ORJSONResponse:
     await connection().execute(
         """
-        update users set 
+        update users set
             two_factor_secret = null,
             two_factor_recovery = null
         where id = $1
         """,
-        request.user.id
+        request.user.id,
     )
     return ORJSONResponse()
 
@@ -213,15 +207,17 @@ async def reset_two_factor_recovery_code(request: Request) -> ORJSONResponse:
         update users set two_factor_recovery = $1 where id = $2
         """,
         recovery,
-        request.user.id
+        request.user.id,
     )
     return ORJSONResponse(recovery)
 
 
 def make_totp_qr_code(secret: str, email: str) -> str:
     account_label = urllib.parse.quote(email.replace(":", "_"))
-    totp_uri = f"otpauth://totp/{TOTP_ISSUER}:{account_label}" \
-               f"?issuer={TOTP_ISSUER}&secret={secret}"
+    totp_uri = (
+        f"otpauth://totp/{TOTP_ISSUER}:{account_label}"
+        f"?issuer={TOTP_ISSUER}&secret={secret}"
+    )
     qr_code = make_qr_code(totp_uri, image_factory=SvgPathFillImage)
     buffer = io.BytesIO()
     qr_code.save(buffer)

@@ -1,4 +1,4 @@
-import pyotp
+import pyotp  # type: ignore
 import starlette.requests
 
 from tome.controllers.auth import get_auth_token
