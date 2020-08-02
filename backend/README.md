@@ -83,6 +83,23 @@ sudo docker-compose exec backend poetry run python -m pytest
 
 ---
 
+### Install Dependencies
+(using [Poetry](https://python-poetry.org))
+
+If you've added a new dependency to the project and you need it to be installed.
+
+```bash
+sudo docker-compose exec backend poetry install --no-root
+```
+
+Alternatively, for a full rebuild, which may be cleaner:
+
+```bash
+sudo docker-compose up -d --build backend
+```
+
+---
+
 ### Run Database Migrations
 (using the custom system)
 
