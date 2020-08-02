@@ -13,8 +13,9 @@ export default {
     }
   },
   mounted () {
+    Store.dispatch('login/doRefresh')
     // refresh login token every 5 minutes
-    window.setInterval(() => Store.dispatch('login/doRefresh'), 300)
+    window.setInterval(() => Store.dispatch('login/doRefresh'), 300000)
   }
 }
 </script>

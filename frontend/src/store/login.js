@@ -76,7 +76,7 @@ export default {
       const response = await dispatch('apiRequest', {
         method: 'POST',
         path: '/api/auth/refresh'
-      })
+      }, { root: true })
       if (response.ok) {
         commit('setLoginToken', await response.json())
       } else {
