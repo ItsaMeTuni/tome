@@ -1,15 +1,26 @@
 <template>
-  <div id="nodes">
-    <div v-for="[depth, node] in depthCache" :key="node.id" class="node">
-      <div v-for="i in depth" :key="i" class="node-indent"></div>
-      <div class="node-content">
-        <p class="node-text" contenteditable>{{ node.content }}</p>
+  <v-app>
+    <v-main app>
+      <div id="nodes">
+        <div v-for="[depth, node] in depthCache" :key="node.id" class="node">
+          <div v-for="i in depth" :key="i" class="node-indent"></div>
+          <div class="node-content">
+            <p class="node-text" contenteditable>{{ node.content }}</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    </v-main>
+    <Footer>
+      <v-btn icon to="/settings/account" small>
+        <v-icon>mdi-cog</v-icon>
+      </v-btn>
+    </Footer>
+  </v-app>
 </template>
 
 <script>
+import Footer from '@/components/Footer.vue'
+
 export default {
   name: 'Home',
   data: () => ({
@@ -47,11 +58,16 @@ export default {
   },
   mounted () {
     this.buildDepthCache()
-  }
+  },
+  components: { Footer }
 }
 </script>
 
 <style lang="scss">
+#nodes {
+  height: 100%;
+  margin: 1em;
+}
 .node {
   width: 100%;
   display: flex
