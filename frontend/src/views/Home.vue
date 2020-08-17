@@ -117,7 +117,6 @@ export default {
 <style lang="scss">
 #nodes {
   height: 100%;
-  margin: 1em 0;
 
   .node {
     width: 100%;
@@ -133,7 +132,8 @@ export default {
       flex-grow: 1;
 
       .node-text {
-        margin: 0.5em 0;
+        margin: 0;
+        padding: 0.5em 0;
       }
     }
   }
