@@ -6,13 +6,13 @@
           v-for="[depth, id] in depthCache"
           :key="id"
           :id="id"
-          :node="id"
+          :data-node="id"
           class="node"
           @contextmenu="onContextMenu"
         >
-          <div v-for="i in depth" :key="i" class="node-indent" :node="id"></div>
-          <div class="node-content" :node="id">
-            <p class="node-text" contenteditable :node="id">{{ nodes[id].content }}</p>
+          <div v-for="i in depth" :key="i" class="node-indent" :data-node="id"></div>
+          <div class="node-content" :data-node="id">
+            <p class="node-text" contenteditable :data-node="id">{{ nodes[id].content }}</p>
           </div>
         </div>
       </div>
@@ -96,7 +96,7 @@ export default {
         this.eventTarget = null
       } else {
         event.preventDefault()
-        this.eventTarget = event.target.getAttribute('node')
+        this.eventTarget = event.target.getAttribute('data-node')
         this.contextMenuOpen = true
         this.contextMenuX = event.pageX
         this.contextMenuY = event.pageY
