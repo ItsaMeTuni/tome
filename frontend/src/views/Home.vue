@@ -123,6 +123,14 @@ export default {
     display: flex;
     padding: 0 1em;
 
+    .theme--dark &:focus-within {
+      background: #424242;
+    }
+
+    .theme--light &:focus-within {
+      background: #f5f5f5;
+    }
+
     .node-indent {
       width: 1em;
       height: 1em;
