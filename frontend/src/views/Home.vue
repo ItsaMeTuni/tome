@@ -118,6 +118,25 @@ export default {
 #nodes {
   height: 100%;
   margin: 1em 0;
+
+  .node {
+    width: 100%;
+    display: flex;
+    padding: 0 1em;
+
+    .node-indent {
+      width: 1em;
+      height: 1em;
+    }
+
+    .node-content {
+      flex-grow: 1;
+
+      .node-text {
+        margin: 0.5em 0;
+      }
+    }
+  }
 }
 #nodes-context-menu-blocker {
   height: 100vh;
@@ -131,20 +150,5 @@ export default {
 #nodes-context-menu {
   position: absolute;
   z-index: 200;
-}
-.node {
-  width: 100%;
-  display: flex;
-  padding: 0 1em;
-}
-.node-indent {
-  width: 1em;
-  height: 1em;
-}
-.node-content {
-  flex-grow: 1;
-}
-.node-text {
-  margin: 0.5em 0 !important;
 }
 </style>
