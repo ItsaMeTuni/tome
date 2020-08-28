@@ -111,6 +111,6 @@ def dynamic_update_query(
                 # format with the column name, to keep the existing stored value
                 format_args.append(column)
 
-        return template.format(*format_args), *extra, *values
+        return [template.format(*format_args), *extra, *values]
 
     return inner
