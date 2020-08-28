@@ -61,10 +61,24 @@ You will need Docker and Docker Compose installed on your server.
 For full `.env` configuration reference, see ~~the docs~~
 [`backend/tome/settings.py`](./backend/tome/settings.py)
 
+## FAQ
+
+### Q. Why doesn't it have bold/italic/etc. inline formatting?
+
+A. To me, part of the idea of this app is that you can nest levels of hierarchical
+structure for your notes, so if you want to emphasise part of a node you should split
+it into some children with links
+
+### Q. Why doesn't it have XYZ feature?
+
+A. This is a passion project developed in my limited free time. Create an issue and
+thumbs-up them to tell me what to work on. Or contribute yourself!
+
 ## Development
 *(see also: [Contributing](#Contributing))*
 
-Tome's backend is written in Python, and the frontend is written in Vue.js. For more information, see the README files in the frontend and backend directories.
+Tome's backend is written in Python, and the frontend is written in Vue.js. For more
+information, see the README files in the frontend and backend directories.
 
 The best way to set up a development environment is with Docker and Docker-Compose. It
 might work outside Docker, but I won't recommend or support it.
