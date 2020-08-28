@@ -42,7 +42,7 @@ def get_versions() -> Generator[Tuple[str, ModuleType], None, None]:
 async def get_current_version(conn: asyncpg.Connection) -> Optional[str]:
     """fetch the current migration version from the database"""
     return cast(
-        Optional[str],
+        "Optional[str]",
         (await conn.fetchrow("""select id from migration_version limit 1"""))[0],
     )
 
