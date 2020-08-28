@@ -17,7 +17,7 @@ app = Starlette(
         Middleware(RequestContextMiddleware),
         Middleware(AuthenticationMiddleware),
     ],
-    on_startup=[database.connect, email.connect],
+    on_startup=[database.start, email.connect],
     on_shutdown=[database.disconnect, email.disconnect],
     debug=DEBUG,
 )

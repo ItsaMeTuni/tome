@@ -3,6 +3,7 @@ from typing import Any, Callable, Iterable
 
 import asyncpg  # type: ignore
 
+import migrations
 from tome.settings import database as settings
 from tome.exceptions import HTTPException
 
@@ -25,6 +26,13 @@ def _uuid_coerce(value: Any) -> bytes:
         return uuid.UUID(int=value).bytes
     else:
         raise TypeError(f"cannot coerce object of type {type(value)} to a UUID")
+
+
+async def start() -> None:
+    # connect and then run any migrations
+    await connect()
+    if a := await migrations.main(conn=connection()):
+        raise Exception(f"migrations failed with status code {a}")
 
 
 async def connect() -> None:
