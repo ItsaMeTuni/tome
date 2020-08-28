@@ -1,3 +1,4 @@
+import asyncio
 import warnings
 from typing import (  # type: ignore
     Any,
@@ -8,7 +9,7 @@ from typing import (  # type: ignore
     Optional,
     Union,
     _GenericAlias,
-    _TypedDictMeta,
+    _TypedDictMeta, Awaitable, Coroutine, Tuple,
 )
 
 import orjson
@@ -143,3 +144,13 @@ def validate_types_raising(data: Any, type_: Any) -> None:
     """
     if not validate_types(data, type_):
         raise HTTPException("invalid types", 422)
+
+
+def simultaneous(
+    *tasks: Callable[[], Awaitable[Any]]
+) -> Tuple[Callable[[], Coroutine[None, None, None]]]:
+    """closure, returns a function that can run multiple tasks simultaneously"""
+    async def inner() -> None:
+        await asyncio.gather(tasks)
+
+    return inner,

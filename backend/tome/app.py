@@ -9,6 +9,7 @@ from tome.middleware.request_context import RequestContextMiddleware
 from tome.routes import routes
 from tome.routing import index
 from tome.settings import DEBUG
+from tome.utils import simultaneous
 
 app = Starlette(
     routes=[index, *routes],
@@ -17,7 +18,7 @@ app = Starlette(
         Middleware(RequestContextMiddleware),
         Middleware(AuthenticationMiddleware),
     ],
-    on_startup=[database.start, email.connect],
-    on_shutdown=[database.disconnect, email.disconnect],
+    on_startup=simultaneous(database.start, email.connect),
+    on_shutdown=simultaneous(database.disconnect, email.disconnect),
     debug=DEBUG,
 )
