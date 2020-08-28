@@ -2,10 +2,9 @@
 
 import importlib.util
 import logging
-import os
 import pathlib
 from types import ModuleType
-from typing import Generator, List, Optional, Tuple, cast
+from typing import Generator, List, Optional, Tuple, cast, Mapping, Sequence, Any
 
 import asyncpg  # type: ignore
 
@@ -52,7 +51,12 @@ async def update_current_version(conn: asyncpg.Connection, version: str) -> None
     await conn.execute("""update migration_version set id = $1 where the""", version)
 
 
-async def main(whither: Optional[str] = None, *, dry_run: bool = False) -> int:
+async def main(
+        *,
+        conn: asyncpg.Connection,
+        whither: Optional[str] = None,
+        dry_run: bool = False
+) -> int:
     """main method, discovers and runs specified migrations
 
     whither: version id to upgrade/downgrade to. if None, use the latest available
@@ -66,15 +70,6 @@ async def main(whither: Optional[str] = None, *, dry_run: bool = False) -> int:
         logger.critical(f"could not find the specified version: {whither}")
         return 1
 
-    dsn = os.getenv("TOME_DSN")
-    if not dsn:
-        logger.critical(
-            "please set the $TOME_DSN environment variable"
-            " to a 'postgresql://user:pass@server:port/db' URI"
-        )
-        return 1
-
-    conn = await asyncpg.connect(dsn)
     try:
         return await migrate(
             conn=conn, versions=versions, whither=whither, dry_run=dry_run

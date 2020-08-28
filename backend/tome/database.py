@@ -3,7 +3,7 @@ from typing import Any, Callable, Iterable
 
 import asyncpg  # type: ignore
 
-from tome import settings
+from tome.settings import database as settings
 from tome.exceptions import HTTPException
 
 _connection: asyncpg.Connection = None

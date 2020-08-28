@@ -6,6 +6,7 @@ import logging
 import sys
 
 import migrations
+import tome.database
 
 LOG_LEVELS = {
     "warning": logging.WARNING,
@@ -38,13 +39,31 @@ args = parser.parse_args()
 
 logger.setLevel(LOG_LEVELS[args.log_level])
 
-try:
-    exit_code = asyncio.run(migrations.main(whither=args.whither, dry_run=args.dry_run))
-except KeyboardInterrupt:
-    logger.error("keyboard interrupt: rolled back")
-    exit_code = 130
-except BaseException as e:
-    logger.critical("a fatal error occurred", exc_info=e)
-    raise
 
-sys.exit(exit_code)
+async def main() -> int:
+    """main async portion of command-line runner. returns status code 0-255"""
+    try:
+        await tome.database.connect()
+        return await migrations.main(
+            whither=args.whither,
+            conn=tome.database.connection(),
+            dry_run=args.dry_run
+        )
+    except KeyboardInterrupt:
+        logger.critical("keyboard interrupt")
+        try:
+            await tome.database.disconnect()
+        except Exception as e:
+            logger.error("failed to cleanly disconnect database", exc_info=e)
+        logger.info("rolled back")
+        return 130
+    except Exception as e:
+        logger.critical("a fatal error occurred!", exc_info=e)
+        await tome.database.disconnect()
+        logger.info("rolled back")
+        return 3
+    finally:
+        await tome.database.disconnect()
+
+
+sys.exit(asyncio.run(main()) or 0)
