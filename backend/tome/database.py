@@ -4,8 +4,8 @@ from typing import Any, Callable, Iterable
 import asyncpg  # type: ignore
 
 import migrations
-from tome.settings import database as settings
 from tome.exceptions import HTTPException
+from tome.settings import database as settings
 
 _connection: asyncpg.Connection = None
 

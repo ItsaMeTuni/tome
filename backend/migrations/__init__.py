@@ -4,7 +4,7 @@ import importlib.util
 import logging
 import pathlib
 from types import ModuleType
-from typing import Generator, List, Optional, Tuple, cast, Mapping, Sequence, Any
+from typing import Any, Generator, List, Mapping, Optional, Sequence, Tuple, cast
 
 import asyncpg  # type: ignore
 
@@ -52,10 +52,7 @@ async def update_current_version(conn: asyncpg.Connection, version: str) -> None
 
 
 async def main(
-        *,
-        conn: asyncpg.Connection,
-        whither: Optional[str] = None,
-        dry_run: bool = False
+    *, conn: asyncpg.Connection, whither: Optional[str] = None, dry_run: bool = False
 ) -> int:
     """main method, discovers and runs specified migrations
 

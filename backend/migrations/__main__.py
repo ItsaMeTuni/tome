@@ -45,9 +45,7 @@ async def main() -> int:
     try:
         await tome.database.connect()
         return await migrations.main(
-            whither=args.whither,
-            conn=tome.database.connection(),
-            dry_run=args.dry_run
+            whither=args.whither, conn=tome.database.connection(), dry_run=args.dry_run
         )
     except KeyboardInterrupt:
         logger.critical("keyboard interrupt")

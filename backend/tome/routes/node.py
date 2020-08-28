@@ -8,7 +8,7 @@ from tome.database import connection, dynamic_update_query
 from tome.exceptions import HTTPException
 from tome.middleware.auth import requires
 from tome.responses import ORJSONResponse
-from tome.routing import post, patch, delete, get
+from tome.routing import delete, get, patch, post
 from tome.utils import get_json, validate_types_raising
 
 
@@ -53,10 +53,7 @@ async def create_node(request: Request) -> ORJSONResponse:
 
 
 _modify_node_query = dynamic_update_query(
-    "nodes",
-    ["content", "parent"],
-    "where id = $1 returinng *",
-    1
+    "nodes", ["content", "parent"], "where id = $1 returinng *", 1
 )
 
 

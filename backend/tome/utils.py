@@ -2,14 +2,17 @@ import asyncio
 import warnings
 from typing import (  # type: ignore
     Any,
+    Awaitable,
     Callable,
     ClassVar,
+    Coroutine,
     Final,
     Literal,
     Optional,
+    Tuple,
     Union,
     _GenericAlias,
-    _TypedDictMeta, Awaitable, Coroutine, Tuple,
+    _TypedDictMeta,
 )
 
 import orjson
@@ -150,7 +153,8 @@ def simultaneous(
     *tasks: Callable[[], Awaitable[Any]]
 ) -> Tuple[Callable[[], Coroutine[None, None, None]]]:
     """closure, returns a function that can run multiple tasks simultaneously"""
+
     async def inner() -> None:
         await asyncio.gather(tasks)
 
-    return inner,
+    return (inner,)

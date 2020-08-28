@@ -15,7 +15,7 @@ def _get(name: str, default: Any = ..., prefix: str = _PREFIX) -> Any:
 
 def _bool(string: str) -> bool:
     return (
-            string.lower().startswith("y")
-            or string.lower().startswith("t")
-            or string.lower().startswith("1")
+        string.lower().startswith("y")
+        or string.lower().startswith("t")
+        or string.lower().startswith("1")
     )
