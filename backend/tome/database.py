@@ -31,7 +31,8 @@ def _uuid_coerce(value: Any) -> bytes:
 async def start() -> None:
     # connect and then run any migrations
     await connect()
-    if a := await migrations.main(conn=connection()):
+    if a := await migrations.main(conn=connection(), close_connection=False):
+        await disconnect()
         raise Exception(f"migrations failed with status code {a}")
 
 

@@ -52,7 +52,10 @@ async def update_current_version(conn: asyncpg.Connection, version: str) -> None
 
 
 async def main(
-    *, conn: asyncpg.Connection, whither: Optional[str] = None, dry_run: bool = False
+    *,
+    conn: asyncpg.Connection, whither: Optional[str] = None,
+    dry_run: bool = False,
+    close_connection: bool = False,
 ) -> int:
     """main method, discovers and runs specified migrations
 
@@ -72,7 +75,8 @@ async def main(
             conn=conn, versions=versions, whither=whither, dry_run=dry_run
         )
     finally:
-        await conn.close()
+        if close_connection:
+            await conn.close()
 
 
 async def migrate(
