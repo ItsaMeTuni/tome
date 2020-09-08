@@ -4,7 +4,7 @@ from typing import Any
 _PREFIX = "TOME_"
 
 
-def _get(name: str, default: Any = ..., prefix: str = _PREFIX) -> Any:
+def get(name: str, default: Any = ..., prefix: str = _PREFIX) -> Any:
     v = os.getenv(prefix + name.upper())
     if not v and default is ...:
         raise Exception(
@@ -13,7 +13,7 @@ def _get(name: str, default: Any = ..., prefix: str = _PREFIX) -> Any:
     return v or default
 
 
-def _bool(string: str) -> bool:
+def as_bool(string: str) -> bool:
     return (
         string.lower().startswith("y")
         or string.lower().startswith("t")
