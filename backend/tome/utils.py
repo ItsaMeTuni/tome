@@ -150,11 +150,11 @@ def validate_types_raising(data: Any, type_: Any) -> None:
 
 
 def simultaneous(
-    *tasks: Callable[[], Awaitable[Any]]
+    *functions: Callable[[], Awaitable[Any]]
 ) -> Tuple[Callable[[], Coroutine[None, None, None]]]:
     """closure, returns a function that can run multiple tasks simultaneously"""
 
     async def inner() -> None:
-        await asyncio.gather(tasks)
+        await asyncio.gather(*[function() for function in functions])
 
     return (inner,)
