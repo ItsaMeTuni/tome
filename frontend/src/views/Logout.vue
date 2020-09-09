@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main app>
-      <v-dialog :value="!hasLoggedOut" max-width="max(40vw, 60vh)" modal>
+      <v-dialog :value="!hasLoggedOut" max-width="max(40vw, 60vh)" persistent>
         <v-card>
           <v-card-title>
             Logout
@@ -17,7 +17,7 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <v-dialog :value="hasLoggedOut" max-width="max(40vw, 60vh)" modal>
+      <v-dialog :value="hasLoggedOut" max-width="max(40vw, 60vh)" persistent>
         <v-card>
           <v-card-title>
             Successfully logged out
