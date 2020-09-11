@@ -1,3 +1,5 @@
+import router from '@/router'
+
 const loginToken = localStorage.getItem('com.pxeger.tome.auth_token')
 
 export default {
@@ -23,6 +25,10 @@ export default {
       state.loginState = value
     },
     unsetLoginState (state) {
+      if (state.loginState === true) {
+        router.push('/login')
+      }
+
       state.loginState = false
       state.loginToken = null
       localStorage.removeItem('com.pxeger.tome.auth_token')

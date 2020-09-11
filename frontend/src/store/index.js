@@ -6,8 +6,6 @@ import account from './account'
 import apikeys from './apikeys'
 import twoFactor from './twoFactor'
 
-import router from '@/router'
-
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -35,7 +33,6 @@ export default new Vuex.Store({
 
         if (json.error === 'invalid token') {
           commit('login/unsetLoginState')
-          router.push('/login')
         }
       }
       return response
