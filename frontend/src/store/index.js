@@ -26,9 +26,17 @@ export default new Vuex.Store({
           Authorization: 'Bearer ' + state.login.loginToken
         }
       })
-      if (response.status === 401 && (await response.json()).error === 'invalid token') {
-        commit('login/unsetLoginState')
-        router.push('/login')
+      if (response.status === 401) {
+        // Clone response so that we can read the body of the response
+        // without preventing the caller of the request from reading it
+        // again
+        const clone = response.clone()
+        const json = await clone.json()
+
+        if (json.error === 'invalid token') {
+          commit('login/unsetLoginState')
+          router.push('/login')
+        }
       }
       return response
     }
