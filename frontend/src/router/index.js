@@ -17,8 +17,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue'),
     beforeEnter: (whither, whence, next) => {
       // go back if they're already logged in
-      if (store.state.login.loginState === true) next(false)
-      else next()
+      if (store.getters['login/isLoggedIn']) {
+        next(false)
+      } else {
+        next()
+      }
     }
   },
   {
@@ -62,7 +65,7 @@ const router = new VueRouter({
 export default router
 
 router.beforeEach((whither, whence, next) => {
-  if (store.state.login.loginState !== true && whither.name !== 'Login') {
+  if (store.getters['login/isLoggedIn'] && whither.name !== 'Login') {
     next({ name: 'Login' })
   } else next()
 })

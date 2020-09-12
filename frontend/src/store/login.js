@@ -1,87 +1,55 @@
-const loginToken = localStorage.getItem('com.pxeger.tome.auth_token')
+const LOCAL_STORAGE_TWO_FACTOR_NEEDED_KEY = 'com.pxeger.tome.needs_two_factor_upgrade'
+const LOCAL_STORAGE_TOKEN_KEY = 'com.pxeger.tome.auth_token'
+const needsTwoFactorUpgrade = !!localStorage.getItem(LOCAL_STORAGE_TWO_FACTOR_NEEDED_KEY)
+const loginToken = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)
 
 export default {
   namespaced: true,
   state: {
     loginToken,
-    loginState: !!loginToken,
-    needsTwoFactorUpgrade: false,
-    twoFactorCode: ''
+    needsTwoFactorUpgrade
+  },
+  getters: {
+    isLoggedIn (state) {
+      return state.loginToken && !state.needsTwoFactorUpgrade
+    }
   },
   mutations: {
-    setLoginToken (state, token) {
+    setLoginToken (state, { needsTwoFactorUpgrade, token }) {
       state.loginToken = token
-      state.loginState = true
+      state.needsTwoFactorUpgrade = needsTwoFactorUpgrade
       try {
-        localStorage.setItem('com.pxeger.tome.auth_token', token)
+        localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, token)
+        localStorage.setItem(LOCAL_STORAGE_TWO_FACTOR_NEEDED_KEY, needsTwoFactorUpgrade)
       } catch (e) {
         console.error(e)
         alert('Could not access Local Storage. Perhaps try a different browser?')
       }
     },
-    setLoginState (state, value) {
-      state.loginState = value
-    },
-    unsetLoginState (state) {
-      state.loginState = false
+    unsetLoginToken (state) {
       state.loginToken = null
-      localStorage.removeItem('com.pxeger.tome.auth_token')
-    },
-    setNeedsTwoFactorUpgrade (state, value) {
-      state.needsTwoFactorUpgrade = value
-    },
-    setTwoFactorCode (state, value) {
-      state.twoFactorCode = value
+      try {
+        localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY)
+        localStorage.removeItem(LOCAL_STORAGE_TWO_FACTOR_NEEDED_KEY)
+      } catch (e) {
+        console.error(e)
+        alert('Could not access Local Storage. Perhaps try a different browser?')
+      }
     }
   },
   actions: {
-    async doLogin ({ commit }, { email, password }) {
-      // not using apiRequest action because we don't send credentials
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({
-          email, password
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        cache: 'no-cache',
-        credentials: 'omit'
-      })
-      const json = await response.json()
-      if (response.ok) {
-        commit('setLoginToken', json.token)
-        commit('setNeedsTwoFactorUpgrade', json.needs_two_factor_upgrade)
-      } else {
-        commit('setLoginState', json.error)
-      }
-    },
-    async doTwoFactorUpgrade ({ commit, dispatch, state }) {
-      const response = await dispatch('apiRequest', {
-        path: '/api/auth/two_factor_upgrade',
-        method: 'POST',
-        data: state.twoFactorCode
-      }, { root: true })
-      const json = await response.json()
-      if (response.ok) {
-        commit('setLoginToken', json)
-      } else {
-        commit('setLoginState', json.error)
-      }
-    },
-    doLogout ({ commit }) {
-      commit('unsetLoginState')
-    },
-    async doRefresh ({ commit, dispatch }) {
-      const response = await dispatch('apiRequest', {
-        method: 'POST',
-        path: '/api/auth/refresh'
-      }, { root: true })
-      if (response.ok) {
-        commit('setLoginToken', await response.json())
-      } else {
-        const data = await response.json()
-        commit('setLoginState', data.error)
+    async doRefresh ({ commit, dispatch, getters }) {
+      if (getters.isLoggedIn) {
+        const response = await dispatch('apiRequest', {
+          method: 'POST',
+          path: '/api/auth/refresh'
+        }, { root: true })
+        if (!response) return
+        if (response.ok) {
+          commit('setLoginToken', await response.json())
+        } else {
+          console.error(await response.json())
+        }
       }
     }
   }

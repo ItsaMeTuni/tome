@@ -27,8 +27,11 @@ export default new Vuex.Store({
         }
       })
       if (response.status === 401 && (await response.json()).error === 'invalid token') {
-        commit('login/unsetLoginState')
-        router.push('/login')
+        commit('login/unsetLoginToken')
+        if (router.currentRoute.name !== 'Login') {
+          router.push('/login')
+        }
+        return
       }
       return response
     }
