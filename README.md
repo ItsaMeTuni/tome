@@ -59,7 +59,7 @@ You will need Docker and Docker Compose installed on your server.
     and then replace them in the `.env` file
     
 For full `.env` configuration reference, see ~~the docs~~
-[`backend/tome/settings.py`](./backend/tome/settings.py)
+[`backend/tome/settings`](./backend/tome/settings/)
 
 ## FAQ
 
