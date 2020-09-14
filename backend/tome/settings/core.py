@@ -13,7 +13,8 @@ def get(name: str, default: Any = ..., prefix: str = _PREFIX) -> Any:
     return v or default
 
 
-def as_bool(string: str) -> bool:
+def as_bool(value: Any) -> bool:
+    string = str(value)
     return (
         string.lower().startswith("y")
         or string.lower().startswith("t")
