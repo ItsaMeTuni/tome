@@ -15,4 +15,4 @@ SMTP_DIRECT_TLS = as_bool(get("SMTP_DIRECT_TLS", ""))
 # enable starttls in smtp
 SMTP_START_TLS = as_bool(get("SMTP_START_TLS", ""))
 # email address to send emails from
-SMTP_FROM = get("SMTP_FROM", SMTP_ENABLED)
+EMAIL_FROM = get("EMAIL_FROM", SMTP_ENABLED)

@@ -17,15 +17,15 @@ Boolean values can be specified in the forms:
 
 `TOME_SMTP_PORT`: (integer) TCP Port number to connect to the SMTP server via. Default 25. If STARTTLS or direct TLS is enabled you'll probably want to set this to 587.
 
-`TOME_SMTP_`: (string) Username with which to authenticate to the SMTP server. Will not login if not specified.
+`TOME_SMTP_USERNAME`: (string) Username with which to authenticate to the SMTP server. Will not login if not specified.
 
 `TOME_SMTP_PASSWORD`: (string) Password with which to authenticate to the SMTP server.
 
-`TOME_SMTP_`: (boolean) Enable the STARTTLS SMTP extension when connecting to the mail server. Default False.
+`TOME_SMTP_STARTTLS`: (boolean) Enable the STARTTLS SMTP extension when connecting to the mail server. Default False.
 
 `TOME_SMTP_DIRECT_TLS`: (boolean) Enable direct TLS connection to the SMTP server (sometimes called SMTPS). Default False.
 
-`TOME_FROM_`: (string) SMTP FROM address to send emails using. To ensure your emails do not get marked as spam, make sure this is a domain the mail server is verified to send from (using SPF/DKIM). Required if SMTP is enabled.
+`TOME_EMAIL_FROM`: (string) SMTP FROM address to send emails using. To ensure your emails do not get marked as spam, make sure this is a domain the mail server is verified to send from (using SPF/DKIM). Required if SMTP is enabled.
 
 ## Database
 **Note that these environment variables do not use the `TOME_` prefix as they are designed to be compatible with those used by the official [PostgreSQL Docker image](https://hub.docker.com/_/postgres)**
