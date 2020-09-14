@@ -20,14 +20,17 @@ async def _create_account(name: str, email: str, password: str) -> UUID:
     if not name:
         raise HTTPException("empty name", 422)
     check_password_strength(password)
-    return await connection().fetchval(
-        """
-        insert into users (email, name, password) values ($1, $2, $3) returning id;
-        """,
-        email,
-        name,
-        hash_password(password),
-    )
+    try:
+        return await connection().fetchval(
+            """
+            insert into users (email, name, password) values ($1, $2, $3) returning id;
+            """,
+            email,
+            name,
+            hash_password(password),
+        )
+    except asyncpg.UniqueViolationError as e:
+        raise HTTPException("account already exists", 409) from e
 
 
 @get("/api/signup")
@@ -76,11 +79,8 @@ async def signup_confirm(request: Request) -> ORJSONResponse:
 
     email = decode_jwt(json["token"])["sub"]
 
-    try:
-        json["email"] = email
-        user_id = await _create_account(**json)
-    except asyncpg.UniqueViolationError as e:
-        raise HTTPException("account already exists", 409) from e
+    json["email"] = email
+    user_id = await _create_account(**json)
 
     return ORJSONResponse(user_id)
 
