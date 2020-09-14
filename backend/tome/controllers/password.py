@@ -1,4 +1,4 @@
-from typing import Optional, cast, Literal
+from typing import Literal, Optional, cast
 
 from argon2 import PasswordHasher  # type: ignore
 from argon2.exceptions import VerifyMismatchError  # type: ignore

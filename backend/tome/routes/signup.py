@@ -12,7 +12,7 @@ from tome.email import send_message
 from tome.exceptions import HTTPException
 from tome.middleware.auth import requires
 from tome.responses import ORJSONResponse
-from tome.routing import post, get
+from tome.routing import get, post
 from tome.utils import get_json, validate_types_raising
 
 
@@ -26,16 +26,18 @@ async def _create_account(name: str, email: str, password: str) -> UUID:
         """,
         email,
         name,
-        hash_password(password)
+        hash_password(password),
     )
 
 
 @get("/api/signup")
 async def check_signup_availability(_request: Request) -> ORJSONResponse:
-    return ORJSONResponse({
-        "enabled": settings.SIGNUP_ENABLED,
-        "email_confirm_required": settings.SIGNUP_EMAIL_CONFIRM_REQUIRED
-    })
+    return ORJSONResponse(
+        {
+            "enabled": settings.SIGNUP_ENABLED,
+            "email_confirm_required": settings.SIGNUP_EMAIL_CONFIRM_REQUIRED,
+        }
+    )
 
 
 @post("/api/signup")

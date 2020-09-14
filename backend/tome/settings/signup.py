@@ -1,5 +1,5 @@
-from .core import as_bool, get
 from . import email
+from .core import as_bool, get
 
 __all__ = ["SIGNUP_ENABLED", "SIGNUP_EMAIL_CONFIRM_REQUIRED"]
 

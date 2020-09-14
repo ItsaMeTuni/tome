@@ -8,8 +8,11 @@ from qrcode import make as make_qr_code  # type: ignore
 from qrcode.image.svg import SvgPathFillImage  # type: ignore
 from starlette.requests import Request
 
-from tome.controllers.password import hash_password, verify_password, \
-    check_password_strength
+from tome.controllers.password import (
+    check_password_strength,
+    hash_password,
+    verify_password,
+)
 from tome.database import connection
 from tome.exceptions import HTTPException
 from tome.middleware.auth import requires

@@ -53,7 +53,8 @@ async def update_current_version(conn: asyncpg.Connection, version: str) -> None
 
 async def main(
     *,
-    conn: asyncpg.Connection, whither: Optional[str] = None,
+    conn: asyncpg.Connection,
+    whither: Optional[str] = None,
     dry_run: bool = False,
     close_connection: bool = False,
 ) -> int:

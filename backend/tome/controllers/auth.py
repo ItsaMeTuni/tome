@@ -1,6 +1,6 @@
 import time
 from datetime import datetime
-from typing import List, Optional, Sequence, Tuple, cast, Union, Any
+from typing import Any, List, Optional, Sequence, Tuple, Union, cast
 from uuid import UUID
 
 import jwt
