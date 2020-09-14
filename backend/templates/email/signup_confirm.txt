@@ -1,0 +1,10 @@
+Hi there!
+
+Somebody (hopefully you) wanted to create an account on Tome using this email address
+({{email}}). If this was you, click this link to confirm your account:
+
+    {{url_base}}/confirm_email?token={{token}}
+
+If this wasn't you, you can safely ignore this email.
+
+{{footer}}
