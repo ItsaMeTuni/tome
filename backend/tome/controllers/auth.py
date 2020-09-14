@@ -1,6 +1,6 @@
 import time
 from datetime import datetime
-from typing import List, Optional, Sequence, Tuple, cast
+from typing import List, Optional, Sequence, Tuple, cast, Union, Any
 from uuid import UUID
 
 import jwt
@@ -35,9 +35,9 @@ async def get_auth_token(user_id: UUID, scope: List[str], expiry: int = EXPIRY) 
     ).decode()
 
 
-async def validate_auth_token(token: bytes) -> Tuple[User, List[str]]:
+def decode_jwt(token: Union[str, bytes]) -> Any:
     try:
-        payload = jwt.decode(
+        return jwt.decode(
             token,
             algorithms=[ALGORITHM],
             key=SECRET_KEY,
@@ -46,6 +46,10 @@ async def validate_auth_token(token: bytes) -> Tuple[User, List[str]]:
         )
     except jwt.InvalidTokenError as e:
         raise HTTPException("invalid token", 401) from e
+
+
+async def validate_auth_token(token: Union[str, bytes]) -> Tuple[User, List[str]]:
+    payload = decode_jwt(token)
     user = await connection().fetchrow(
         "SELECT * FROM users WHERE id = $1", payload["sub"]
     )
