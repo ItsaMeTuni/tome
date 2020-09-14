@@ -6,7 +6,6 @@ python -m mypy \
   --disallow-incomplete-defs \
   --disallow-untyped-decorators \
   --warn-unreachable \
-  --warn-return-any \
   --show-column-numbers \
   --show-error-codes \
   --pretty \

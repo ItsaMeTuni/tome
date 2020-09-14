@@ -1,7 +1,7 @@
 from uuid import UUID
 
-import asyncpg
-import email_validator
+import asyncpg  # type: ignore
+import email_validator  # type: ignore
 from starlette.requests import Request
 
 from tome import settings
@@ -77,7 +77,8 @@ async def signup_confirm(request: Request) -> ORJSONResponse:
     email = decode_jwt(json["token"])["sub"]
 
     try:
-        user_id = await _create_account(**json, email=email)
+        json["email"] = email
+        user_id = await _create_account(**json)
     except asyncpg.UniqueViolationError as e:
         raise HTTPException("account already exists", 409) from e
 

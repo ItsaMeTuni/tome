@@ -39,7 +39,7 @@ async def create_node(request: Request) -> ORJSONResponse:
 
 @delete("/api/nodes")
 @requires("nodes.delete")
-async def create_node(request: Request) -> ORJSONResponse:
+async def delete_node(request: Request) -> ORJSONResponse:
     try:
         id_ = uuid.UUID(request.query_params.get("id"))
     except (ValueError, TypeError) as e:

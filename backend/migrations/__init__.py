@@ -4,7 +4,7 @@ import importlib.util
 import logging
 import pathlib
 from types import ModuleType
-from typing import Any, Generator, List, Mapping, Optional, Sequence, Tuple, cast
+from typing import Generator, List, Optional, Tuple, cast
 
 import asyncpg  # type: ignore
 

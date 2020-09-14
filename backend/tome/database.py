@@ -82,7 +82,8 @@ def dynamic_update_query(
     Same as `update users set id = id, name = 'hello', email = NULL where id = 345`
 
 
-    table_name, columns, and where must be sanitised!!"""
+    table_name, columns, and where must be sanitised!!
+    """
 
     # format-ception
     update = ", ".join(map("{} = {{}}".format, columns))
