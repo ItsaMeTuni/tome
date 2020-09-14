@@ -49,3 +49,9 @@ Boolean values can be specified in the forms:
 `TOME_JWT_NAME`: (string) audience and issuer for authentication tokens. Default `tome`. You don't need to change this.
 
 `TOME_JWT_EXPIRY`: (integer) time in seconds before authentication tokens expire. Default `86400` (one day).
+
+## Signup
+`TOME_SIGNUP_ENABLED`: (bool) enable signing up. Default true.
+
+`TOME_SIGNUP_EMAIL_CONFIRM_REQUIRED`: (bool) require email confirmation to sign up. Defaults to the same value as SMTP_ENABLED.
+
