@@ -55,7 +55,7 @@ async def signup_no_confirm(request: Request) -> ORJSONResponse:
 
     user_id = await _create_account(**json)
 
-    return ORJSONResponse(user_id)
+    return ORJSONResponse(user_id, 201)
 
 
 @post("/api/signup")
@@ -72,7 +72,7 @@ async def signup(request: Request) -> ORJSONResponse:
         raise HTTPException("email address in use", 422)
 
     await send_message(email, "Confirm Tome account", "signup_confirm")
-    return ORJSONResponse()
+    return ORJSONResponse(None, 202)
 
 
 @post("/api/signup/confirm")
@@ -88,7 +88,7 @@ async def signup_confirm(request: Request) -> ORJSONResponse:
     except HTTPException as e:
         raise HTTPException("account has already been created", 409) from e
 
-    return ORJSONResponse(user_id)
+    return ORJSONResponse(user_id, 201)
 
 
 routes = [check_signup_availability]
