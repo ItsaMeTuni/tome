@@ -30,7 +30,7 @@ async def _create_account(name: str, email: str, password: str) -> UUID:
             hash_password(password),
         )
     except asyncpg.UniqueViolationError as e:
-        raise HTTPException("account already exists", 409) from e
+        raise HTTPException("email address in use", 422) from e
 
 
 @get("/api/signup")
@@ -68,6 +68,9 @@ async def signup(request: Request) -> ORJSONResponse:
     except email_validator.EmailNotValidError as e:
         raise HTTPException("invalid email address", 422) from e
 
+    if await connection().fetchval("""select id from users where email = $1""", email):
+        raise HTTPException("email address in use", 422)
+
     await send_message(email, "Confirm Tome account", "signup_confirm")
     return ORJSONResponse()
 
@@ -78,9 +81,12 @@ async def signup_confirm(request: Request) -> ORJSONResponse:
     validate_types_raising(json, {"name": str, "password": str, "token": str})
 
     email = decode_jwt(json["token"])["sub"]
-
     json["email"] = email
-    user_id = await _create_account(**json)
+
+    try:
+        user_id = await _create_account(**json)
+    except HTTPException as e:
+        raise HTTPException("account has already been created", 409) from e
 
     return ORJSONResponse(user_id)
 
