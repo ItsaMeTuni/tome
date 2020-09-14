@@ -11,7 +11,7 @@ from typing import (  # type: ignore
     Optional,
     Tuple,
     Union,
-    _GenericAlias,
+    get_origin,
     _TypedDictMeta,
 )
 
@@ -88,37 +88,40 @@ def validate_types(data: Any, type_: Any, /) -> bool:
         return True
     elif type_ is None or type_ is type(None):  # noqa: E721
         return data is None
-    elif isinstance(type_, _GenericAlias):
-        # special PEP 484 type
-        if type_._special:
-            # special types are like Dict (not Dict[x, y] or dict)
-            return isinstance(data, type_.__origin__)
-        if type_.__origin__ is Union:
-            return any(validate_types(data, t) for t in type_.__args__)
-        elif type_.__origin__ is Literal:
-            return data in type_.__args__
-        elif type_.__origin__ is Final or type_.__origin__ is ClassVar:
-            return validate_types(data, type_.__args__[0])
-        elif type_.__origin__ is tuple:
-            return (
-                isinstance(data, (list, tuple))
-                and len(data) == len(type_.__args__)
-                and all(
-                    validate_types(v, type_.__args__[i]) for i, v in enumerate(data)
+    elif origin := get_origin(type_):
+        # special PEP 484 types like like Dict (not Dict[x, y] or dict) can just be used
+        # with isinstance
+        try:
+            return isinstance(data, origin)
+        except TypeError:
+            if origin is Union:
+                return any(validate_types(data, t) for t in type_.__args__)
+            elif origin is Literal:
+                return data in type_.__args__
+            elif origin is Final or origin is ClassVar:
+                return validate_types(data, type_.__args__[0])
+            elif origin is tuple:
+                return (
+                    isinstance(data, (list, tuple))
+                    and len(data) == len(type_.__args__)
+                    and all(
+                        validate_types(v, type_.__args__[i]) for i, v in enumerate(data)
+                    )
                 )
-            )
-        elif type_.__origin__ is list:
-            return isinstance(data, list) and all(
-                validate_types(v, type_.__args__[0]) for v in data
-            )
-        elif type_.__origin__ is dict:
-            return (
-                isinstance(data, dict)
-                and all(validate_types(k, type_.__args__[0]) for k in data)
-                and all(validate_types(v, type_.__args__[1]) for v in data.values())
-            )
-        else:
-            raise TypeError(f"cannot validate {type_}")
+            elif origin is list:
+                return isinstance(data, list) and all(
+                    validate_types(v, type_.__args__[0]) for v in data
+                )
+            elif origin is dict:
+                return (
+                    isinstance(data, dict)
+                    and all(validate_types(k, type_.__args__[0]) for k in data)
+                    and all(validate_types(v, type_.__args__[1]) for v in data.values())
+                )
+            else:
+                raise TypeError(f"cannot validate {type_}")
+    # TODO(pxeger): replace with stable/public API -
+    #  see https://github.com/python/typing/issues/751
     elif isinstance(type_, _TypedDictMeta):  # type: ignore
         # PEP 589 TypedDict
         return validate_types(data, type_.__annotations__)
