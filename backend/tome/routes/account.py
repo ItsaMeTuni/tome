@@ -8,7 +8,8 @@ from qrcode import make as make_qr_code  # type: ignore
 from qrcode.image.svg import SvgPathFillImage  # type: ignore
 from starlette.requests import Request
 
-from tome.controllers.password import hash_password, strength, verify_password
+from tome.controllers.password import hash_password, verify_password, \
+    check_password_strength
 from tome.database import connection
 from tome.exceptions import HTTPException
 from tome.middleware.auth import requires
@@ -78,14 +79,7 @@ async def change_password(request: Request) -> ORJSONResponse:
     if json["new"] == json["current"]:
         # same as current (even if current is incorrect, we needn't bother checking)
         raise HTTPException("Password not changed", 422)
-    elif json["new"] == "beef stew":
-        # easter egg
-        raise HTTPException("Password not stroganoff", 418)
-    elif strength(json["new"]) < 8:
-        raise HTTPException("Password not strong enough", 422)
-    elif any(map(" ".__gt__, json["new"])):
-        # control character
-        raise HTTPException("Invalid character in password", 422)
+    check_password_strength(json["new"])
 
     # check current password is correct
     if not verify_password(request.user.password, json["current"]):

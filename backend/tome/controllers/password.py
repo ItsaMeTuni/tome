@@ -1,7 +1,9 @@
-from typing import Optional, cast
+from typing import Optional, cast, Literal
 
 from argon2 import PasswordHasher  # type: ignore
 from argon2.exceptions import VerifyMismatchError  # type: ignore
+
+from tome.exceptions import HTTPException
 
 _hasher = PasswordHasher()
 
@@ -25,3 +27,15 @@ def rehash(password: str, hash_: str) -> Optional[str]:
 
 def strength(password: str) -> int:
     return len(set(password))
+
+
+def check_password_strength(password: str) -> Literal[True]:
+    if password == "beef stew":
+        # easter egg
+        raise HTTPException("Password not stroganoff", 418)
+    elif strength(password) < 8:
+        raise HTTPException("Password not strong enough", 422)
+    elif any(map(" ".__gt__, password)):
+        # control character
+        raise HTTPException("Invalid character in password", 422)
+    return True
