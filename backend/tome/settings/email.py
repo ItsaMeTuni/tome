@@ -16,3 +16,8 @@ SMTP_DIRECT_TLS = as_bool(get("SMTP_DIRECT_TLS", ""))
 SMTP_START_TLS = as_bool(get("SMTP_START_TLS", ""))
 # email address to send emails from
 EMAIL_FROM = get("EMAIL_FROM", SMTP_ENABLED)
+
+# base for URLs in emails
+EMAIL_URL_BASE = get("EMAIL_URL_BASE", SMTP_ENABLED)
+# footer in email templates
+EMAIL_FOOTER = get("EMAIL_FOOTER", "This email was sent automatically from Tome.")

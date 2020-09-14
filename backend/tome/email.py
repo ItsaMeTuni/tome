@@ -43,10 +43,12 @@ async def send_message(
 ) -> None:
     if settings.SMTP_ENABLED:
         message = MIMEMultipart()
-        message["From"] = settings.SMTP_FROM
+        message["From"] = settings.EMAIL_FROM
         message["To"] = to
         message["Subject"] = subject
         template = templates.get_template(template_name + ".txt")
+        values.setdefault("footer", settings.EMAIL_FOOTER)
+        values.setdefault("url_base", settings.EMAIL_URL_BASE)
         message.attach(
             MIMEText(await template.render_async(**values), "plain", "utf-8")
         )

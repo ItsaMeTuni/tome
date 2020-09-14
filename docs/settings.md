@@ -27,6 +27,10 @@ Boolean values can be specified in the forms:
 
 `TOME_EMAIL_FROM`: (string) SMTP FROM address to send emails using. To ensure your emails do not get marked as spam, make sure this is a domain the mail server is verified to send from (using SPF/DKIM). Required if SMTP is enabled.
 
+`TOME_EMAIL_URL_BASE`: (string) URL base to use when sending emails (such as signup confirmation links). Required when emails are enabled. This should be something like `https://tome.example.com` (include the scheme, and do not include a trailing slash)
+
+`TOME_EMAIL_FOOTER`: (string) Small snippet of plain text to include at the bottom of all emails. Defaults to "*This email was sent automatically from Tome.*"
+
 ## Database
 **Note that these environment variables do not use the `TOME_` prefix as they are designed to be compatible with those used by the official [PostgreSQL Docker image](https://hub.docker.com/_/postgres)**
 
