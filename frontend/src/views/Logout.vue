@@ -41,7 +41,7 @@ export default {
   }),
   methods: {
     doLogout () {
-      this.$store.commit('login/unsetLoginState')
+      this.$store.commit('login/unsetLoginToken')
       this.hasLoggedOut = true
     }
   }
