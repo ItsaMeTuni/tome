@@ -91,7 +91,6 @@ export default {
   }),
   methods: {
     buildNodeTree: function () {
-      console.log(this.nodes)
       this.nodeTree = Array.from(this._buildNodeTree(null))
     },
     _buildNodeTree: function * (targetParentId) {
