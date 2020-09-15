@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer app v-model="drawer">
+    <v-navigation-drawer app permanent>
       <v-list>
         <v-list-item class="mt-n2">
           <v-list-item-icon>
@@ -43,7 +43,6 @@
 export default {
   name: 'Settings',
   data: () => ({
-    drawer: null,
     items: [
       {
         icon: 'account',
