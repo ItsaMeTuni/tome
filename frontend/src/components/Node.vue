@@ -8,11 +8,11 @@
     >
       <div class="node-ident"></div>
       <div class="node-content">
-        <p
-          contenteditable
-          :data-node="nodeData.id"
-          @contextmenu="onContextMenu"
-        >{{nodeData.content}}</p>
+        <textarea
+          class="node-text"
+          v-model="nodeData.content"
+          ref="nodeText"
+        ></textarea>
         <div
           class="node-children"
           :style="{
@@ -59,10 +59,26 @@ export default {
     onContextMenu (e) {
       e.preventDefault()
       this.$emit('contextmenu', e)
+    },
+    updateTextareaHeight () {
+      // Since the textarea does not resize with it's content like
+      // a div would, we need to set it's height manually
+      this.$refs.nodeText.style.height = '0px'
+      const desiredHeight = this.$refs.nodeText.scrollHeight
+      this.$refs.nodeText.style.height = `${desiredHeight}px`
     }
   },
   mounted () {
     this.lineColor = this.getRandomLineColor()
+    this.updateTextareaHeight()
+  },
+  watch: {
+    nodeData: {
+      deep: true,
+      handler: function () {
+        this.updateTextareaHeight()
+      }
+    }
   }
 }
 </script>
@@ -71,7 +87,8 @@ export default {
 
 $ident-width: 4ch;
 $font-size: 20px;
-$text-line-height: 1.8em;
+$text-line-height: 1.2em;
+$p-vert-margin: .3em;
 $line-horiz-space: .6ch;
 $line-width: 3px;
 
@@ -86,10 +103,18 @@ $line-width: 3px;
 
   font-size: $font-size;
 
-  p {
-    margin: 0;
+  textarea {
+    margin: $p-vert-margin 0;
     line-height: $text-line-height;
+    color: inherit;
+
+    display: block;
+
+    overflow: hidden;
+    height: min-content;
+
     outline: none;
+    resize: none;
   }
 }
 
@@ -103,16 +128,14 @@ $line-width: 3px;
     display: none;
   }
 
-  :last-child > &
-  {
-    margin-bottom: calc(#{$text-line-height} / 2 - #{$line-width} / 2);
+  :last-child > & {
+    height: calc(#{$p-vert-margin} + #{$text-line-height} / 2 + #{$line-width} / 2);
   }
 
-  &::after
-  {
+  &::after {
     content: '';
     position: absolute;
-    top: calc(#{$text-line-height} / 2 - #{$line-width} / 2);
+    top: calc(#{$p-vert-margin} + #{$text-line-height} / 2 - #{$line-width} / 2);
     left: $line-width;
     right: calc(#{-$ident-width} / 2 + #{$line-horiz-space});
 
@@ -123,5 +146,4 @@ $line-width: 3px;
     background-color: var(--line-color);
   }
 }
-
 </style>
