@@ -12,6 +12,8 @@
           class="node-text"
           v-model="nodeData.content"
           ref="nodeText"
+          @input="onTextareaInput"
+          @blur="onTextareaBlur"
         ></textarea>
         <div
           class="node-children"
@@ -24,6 +26,7 @@
             :key="child.id"
             :node-data="child"
             @contextmenu="onContextMenu"
+            @delete="(nodeId) => $emit('delete', nodeId)"
           ></node>
         </div>
       </div>
@@ -66,6 +69,17 @@ export default {
       this.$refs.nodeText.style.height = '0px'
       const desiredHeight = this.$refs.nodeText.scrollHeight
       this.$refs.nodeText.style.height = `${desiredHeight}px`
+    },
+    onTextareaBlur () {
+      if (this.nodeData.content === '') {
+        this.deleteNode()
+      }
+    },
+    onTextareaInput () {
+      // make a request to update the node's data
+    },
+    deleteNode () {
+      this.$emit('delete', this.nodeData.id)
     }
   },
   mounted () {

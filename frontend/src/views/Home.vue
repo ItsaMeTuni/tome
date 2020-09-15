@@ -4,10 +4,11 @@
       <div id="nodes">
         <node
           v-for="node in nodeTree"
-          :key="node.id"
+          :key="node._viewportKey"
           :node-data="node"
           isRoot
           @contextmenu="onContextMenu"
+          @delete="deleteNode"
         ></node>
       </div>
       <div
@@ -54,48 +55,56 @@ export default {
     contextMenuX: 0,
     contextMenuY: 0,
     eventTarget: null,
-    nodes: {
-      abc: {
+    nodes: [
+      {
         id: 'abc',
         content: 'Hello, World!',
         parent: null
       },
-      def: {
+      {
         id: 'def',
         content: 'Another thing',
         parent: null
       },
-      ghi: {
+      {
         id: 'ghi',
         content: 'Child 0 of Hello World',
         parent: 'abc'
       },
-      jkl: {
+      {
         id: 'jkl',
         content: 'Child 1 of Hello World',
         parent: 'abc'
       },
-      mno: {
+      {
         id: 'mno',
         content: 'Child 2 of Hello World',
         parent: 'abc'
       },
-      pqr: {
+      {
         id: 'pqr',
         content: 'Child 0 of Child 2 of Hello World',
         parent: 'jkl'
       }
-    },
+    ],
     nodeTree: []
   }),
   methods: {
-    buildNodeTree: function * (targetParentId) {
-      // TODO; Consuming the nodes from `this.nodes` before
+    buildNodeTree: function () {
+      console.log(this.nodes)
+      this.nodeTree = Array.from(this._buildNodeTree(null))
+    },
+    _buildNodeTree: function * (targetParentId) {
+      // TODO: Consuming the nodes from `this.nodes` before
       // building it's child tree would increase performance
-      for (const nodeId in this.nodes) {
-        const node = this.nodes[nodeId]
+      for (const node of this.nodes) {
         if (node.parent === targetParentId) {
-          node.children = Array.from(this.buildNodeTree(node.id))
+          node.children = Array.from(this._buildNodeTree(node.id))
+          // This _uid combines the node's id and the "build time"
+          // of the node tree. This is used as the node's key in the
+          // v-for so that the node component re-renders when
+          // the tree is rebuilt.
+          node._viewportKey = node.id + Date.now().toString()
           yield node
         }
       }
@@ -115,10 +124,14 @@ export default {
     closeContextMenu () {
       this.contextMenuOpen = false
       this.eventTarget = null
+    },
+    deleteNode (nodeId) {
+      this.nodes = this.nodes.filter(node => node.id !== nodeId)
+      this.buildNodeTree()
     }
   },
   mounted () {
-    this.nodeTree = Array.from(this.buildNodeTree(null))
+    this.buildNodeTree()
   },
   components: { Footer, Node }
 }
