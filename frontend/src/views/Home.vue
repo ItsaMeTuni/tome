@@ -2,19 +2,13 @@
   <v-app>
     <v-main app>
       <div id="nodes">
-        <div
-          v-for="[depth, id] in depthCache"
-          :key="id"
-          :id="id"
-          :data-node="id"
-          class="node"
+        <node
+          v-for="node in nodeTree"
+          :key="node.id"
+          :node-data="node"
+          isRoot
           @contextmenu="onContextMenu"
-        >
-          <div v-for="i in depth" :key="i" class="node-indent" :data-node="id"></div>
-          <div class="node-content" :data-node="id">
-            <p class="node-text" contenteditable :data-node="id">{{ nodes[id].content }}</p>
-          </div>
-        </div>
+        ></node>
       </div>
       <div
         id="nodes-context-menu"
@@ -51,6 +45,7 @@
 
 <script>
 import Footer from '@/components/Footer.vue'
+import Node from '@/components/Node.vue'
 
 export default {
   name: 'Home',
@@ -72,21 +67,36 @@ export default {
       },
       ghi: {
         id: 'ghi',
-        content: 'Child of Hello World',
+        content: 'Child 0 of Hello World',
         parent: 'abc'
+      },
+      jkl: {
+        id: 'jkl',
+        content: 'Child 1 of Hello World',
+        parent: 'abc'
+      },
+      mno: {
+        id: 'mno',
+        content: 'Child 2 of Hello World',
+        parent: 'abc'
+      },
+      pqr: {
+        id: 'pqr',
+        content: 'Child 0 of Child 2 of Hello World',
+        parent: 'jkl'
       }
     },
-    depthCache: []
+    nodeTree: []
   }),
   methods: {
-    buildDepthCache () {
-      this.depthCache = Array.from(this._traverse(null, 0))
-    },
-    _traverse: function * (targetParentId, depth) {
-      for (const id in this.nodes) {
-        if (this.nodes[id].parent === targetParentId) {
-          yield [depth, id]
-          yield * this._traverse(id, depth + 1)
+    buildNodeTree: function * (targetParentId) {
+      // TODO; Consuming the nodes from `this.nodes` before
+      // building it's child tree would increase performance
+      for (const nodeId in this.nodes) {
+        const node = this.nodes[nodeId]
+        if (node.parent === targetParentId) {
+          node.children = Array.from(this.buildNodeTree(node.id))
+          yield node
         }
       }
     },
@@ -108,42 +118,28 @@ export default {
     }
   },
   mounted () {
-    this.buildDepthCache()
+    this.nodeTree = Array.from(this.buildNodeTree(null))
   },
-  components: { Footer }
+  components: { Footer, Node }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #nodes {
+  padding: 32px 24px 0 24px;
+
   height: 100%;
 
-  .node {
-    width: 100%;
-    display: flex;
-    padding: 0 1em;
+  .theme--light &
+  {
+    background-color: #f5f5f5;
+    color: #393939;
+  }
 
-    .theme--dark &:focus-within {
-      background: #424242;
-    }
-
-    .theme--light &:focus-within {
-      background: #f5f5f5;
-    }
-
-    .node-indent {
-      width: 1em;
-      height: 1em;
-    }
-
-    .node-content {
-      flex-grow: 1;
-
-      .node-text {
-        margin: 0;
-        padding: 0.5em 0;
-      }
-    }
+  .theme--dark &
+  {
+    background-color: #272727;
+    color: #e4e4e4;
   }
 }
 #nodes-context-menu-blocker {
